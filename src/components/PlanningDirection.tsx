@@ -142,8 +142,8 @@ export function PlanningDirection() {
               <button className="p-2 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors">
                 <ChevronRight className="w-4 h-4 text-slate-400" />
               </button>
-              <button className="p-2 bg-indigo-50 hover:bg-indigo-100 rounded-lg border border-indigo-200 transition-colors">
-                <Play className="w-4 h-4 text-indigo-600 fill-indigo-600" />
+              <button className="p-2 bg-brand-50 hover:bg-brand-100 rounded-lg border border-brand-200 transition-colors">
+                <Play className="w-4 h-4 text-brand-600 fill-brand-600" />
               </button>
             </div>
 
@@ -170,7 +170,7 @@ export function PlanningDirection() {
               <option>夹网泳池</option>
             </select>
           </div>
-          <button className="flex items-center gap-2 px-6 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200">
+          <button className="flex items-center gap-2 px-6 py-2 bg-brand-600 text-white rounded-lg text-sm font-bold hover:bg-brand-700 transition-all shadow-lg shadow-brand-200">
             <Wand2 className="w-4 h-4" />
             开始策划
           </button>
@@ -183,7 +183,7 @@ export function PlanningDirection() {
           <thead className="sticky top-0 bg-slate-50 z-10 border-b border-slate-200">
             <tr>
               <th className="p-4 w-12 border-r border-slate-200">
-                <input type="checkbox" className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" />
+                <input type="checkbox" className="rounded border-slate-300 text-brand-600 focus:ring-brand-500" />
               </th>
               <th className="p-4 w-16 border-r border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">编号</th>
               <th className="p-4 w-48 border-r border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">产品类别</th>
@@ -199,7 +199,7 @@ export function PlanningDirection() {
             {MOCK_PLANNING_DATA.map((item) => (
               <tr key={item.id} className="hover:bg-slate-50/50 transition-colors group align-top">
                 <td className="p-4 border-r border-slate-100">
-                  <input type="checkbox" className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" />
+                  <input type="checkbox" className="rounded border-slate-300 text-brand-600 focus:ring-brand-500" />
                 </td>
                 <td className="p-4 border-r border-slate-100 text-xs text-slate-500">{item.id}</td>
                 <td className="p-4 border-r border-slate-100">

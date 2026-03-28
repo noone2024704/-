@@ -2,23 +2,17 @@ import React, { useState, useMemo } from 'react';
 import { Filter, Store, Calendar, BarChart3, TrendingUp, DollarSign, Target, MousePointerClick, Percent, Activity, Tag, ShoppingCart, Eye, Menu, LayoutDashboard, ClipboardList, Image as ImageIcon, Sparkles, Wand2, Download, Trash2, X, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { SHOPS, MOCK_DATA, PRODUCT_LIBRARY } from './mockData';
-import { SpendRoiChart } from './components/SpendRoiChart';
-import { LinkTrendChart } from './components/LinkTrendChart';
+import { PromotionDashboard } from './components/PromotionDashboard';
 import { Sidebar } from './components/Sidebar';
 import { StrategyMap } from './components/StrategyMap';
 import { CompetitorAnalysis } from './components/CompetitorAnalysis';
 import { PlanningDirection } from './components/PlanningDirection';
 import { IndustryTrend } from './components/IndustryTrend';
-import { format, parseISO, isWithinInterval, startOfToday, subDays, startOfWeek, startOfMonth } from 'date-fns';
+import { format, subDays, startOfWeek, startOfMonth } from 'date-fns';
 import { PromotionType } from './types';
 
 export default function App() {
   const [activePage, setActivePage] = useState<string>('dashboard');
-  const [selectedShop, setSelectedShop] = useState<string>(SHOPS[0].id);
-  const [selectedPromotion, setSelectedPromotion] = useState<PromotionType>('all');
-  const [startDate, setStartDate] = useState<string>(format(subDays(new Date(), 7), 'yyyy-MM-dd')); // Default to last 7 days for better trend
-  const [endDate, setEndDate] = useState<string>(format(new Date(), 'yyyy-MM-dd'));
-  const [selectedLinkId, setSelectedLinkId] = useState<string | null>(null);
   const [sharedStrategyWords, setSharedStrategyWords] = useState<string[]>([]);
   const [sharedCategory, setSharedCategory] = useState<string>('泳池');
   const [productName, setProductName] = useState<string>('');
@@ -29,288 +23,15 @@ export default function App() {
   const [productReferenceImage, setProductReferenceImage] = useState<string | null>(null);
   const [layoutReferenceImage, setLayoutReferenceImage] = useState<string | null>(null);
 
-  const setQuickDate = (type: 'yesterday' | 'week' | 'month' | 'custom') => {
-    const today = new Date();
-    let start = today;
-    let end = today;
-
-    if (type === 'custom') {
-      // For custom, we don't change the dates, just allow the user to use the inputs
-      return;
-    }
-
-    switch (type) {
-      case 'yesterday':
-        start = subDays(today, 1);
-        end = subDays(today, 1);
-        break;
-      case 'week':
-        start = startOfWeek(today, { weekStartsOn: 1 }); // Start from Monday
-        end = today;
-        break;
-      case 'month':
-        start = startOfMonth(today);
-        end = today;
-        break;
-    }
-
-    setStartDate(format(start, 'yyyy-MM-dd'));
-    setEndDate(format(end, 'yyyy-MM-dd'));
-  };
-
-  const activeRange = useMemo(() => {
-    const yesterday = format(subDays(new Date(), 1), 'yyyy-MM-dd');
-    const weekStart = format(startOfWeek(new Date(), { weekStartsOn: 1 }), 'yyyy-MM-dd');
-    const monthStart = format(startOfMonth(new Date()), 'yyyy-MM-dd');
-
-    if (startDate === yesterday && endDate === yesterday) return 'yesterday';
-    if (startDate === weekStart && endDate === format(new Date(), 'yyyy-MM-dd')) return 'week';
-    if (startDate === monthStart && endDate === format(new Date(), 'yyyy-MM-dd')) return 'month';
-    return 'custom';
-  }, [startDate, endDate]);
-
-  const filteredData = useMemo(() => {
-    return MOCK_DATA.filter(item => {
-      const isShopMatch = item.shopId === selectedShop;
-      const isPromotionMatch = selectedPromotion === 'all' || item.promotionType === selectedPromotion;
-      const itemDate = parseISO(item.date);
-      const isDateMatch = isWithinInterval(itemDate, {
-        start: parseISO(startDate),
-        end: parseISO(endDate),
-      });
-      return isShopMatch && isPromotionMatch && isDateMatch;
-    });
-  }, [selectedShop, selectedPromotion, startDate, endDate]);
-
-  const totals = useMemo(() => {
-    const spend = filteredData.reduce((acc, curr) => acc + curr.spend, 0);
-    const clicks = filteredData.reduce((acc, curr) => acc + curr.clicks, 0);
-    const impressions = filteredData.reduce((acc, curr) => acc + curr.impressions, 0);
-    const conversions = filteredData.reduce((acc, curr) => acc + curr.conversions, 0);
-    const cart = filteredData.reduce((acc, curr) => acc + curr.cart, 0);
-    
-    const avgRoi = filteredData.length > 0 
-      ? filteredData.reduce((acc, curr) => acc + curr.roi, 0) / filteredData.length 
-      : 0;
-    
-    const ctr = impressions > 0 ? (clicks / impressions) * 100 : 0;
-    const conversionRate = clicks > 0 ? (conversions / clicks) * 100 : 0;
-    const avgCpc = clicks > 0 ? spend / clicks : 0;
-
-    return { spend, avgRoi, clicks, ctr, conversionRate, avgCpc, cart };
-  }, [filteredData]);
-
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-[#1E293B] font-sans selection:bg-indigo-100 flex justify-center">
-      <div className="w-full max-w-[1600px] flex bg-white shadow-2xl shadow-slate-200/50">
+    <div className="min-h-screen bg-[#F8FAFC] text-[#1E293B] font-sans selection:bg-brand-100 flex justify-start">
+      <div className="w-full flex bg-white shadow-2xl shadow-slate-200/50">
         {/* Sidebar */}
         <Sidebar activeId={activePage} onNavigate={setActivePage} />
 
         <div className="flex-1 flex flex-col min-w-0 bg-[#F8FAFC]">
         {activePage === 'dashboard' ? (
-          <>
-            {/* Header */}
-            <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-20 shadow-sm">
-              <div className="px-6 h-16 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <h1 className="text-lg font-bold tracking-tight text-slate-800">推广驾驶舱</h1>
-                  <div className="h-4 w-[1px] bg-slate-200 mx-2"></div>
-                  <span className="text-xs font-medium text-slate-400">数据看板 / 核心推广指标</span>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="text-xs font-mono text-slate-500 tracking-widest uppercase bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">
-                    {format(new Date(), 'yyyy / MM / dd')}
-                  </div>
-                </div>
-              </div>
-            </header>
-
-            <main className="w-full px-6 py-8">
-              {/* Filters Section */}
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="premium-card p-6 mb-8"
-              >
-                <div className="flex flex-wrap items-center gap-8">
-                  <div className="flex items-center gap-3">
-                    <div className="bg-slate-100 p-2 rounded-full border border-slate-200">
-                      <Filter className="w-4 h-4 text-indigo-600" />
-                    </div>
-                    <span className="text-sm font-semibold text-slate-700">筛选条件</span>
-                  </div>
-
-                  <div className="h-8 w-[1px] bg-slate-200 hidden md:block"></div>
-
-                  {/* Shop Filter */}
-                  <div className="flex items-center gap-2">
-                    <Store className="w-4 h-4 text-slate-400" />
-                    <select 
-                      value={selectedShop}
-                      onChange={(e) => setSelectedShop(e.target.value)}
-                      className="bg-slate-50 border border-slate-200 text-sm text-slate-700 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 outline-none transition-all hover:bg-white"
-                    >
-                      {SHOPS.map(shop => (
-                        <option key={shop.id} value={shop.id}>{shop.name}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Promotion Type Filter */}
-                  <div className="flex items-center gap-2">
-                    <Tag className="w-4 h-4 text-slate-400" />
-                    <select 
-                      value={selectedPromotion}
-                      onChange={(e) => setSelectedPromotion(e.target.value as PromotionType)}
-                      className="bg-slate-50 border border-slate-200 text-sm text-slate-700 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 outline-none transition-all hover:bg-white"
-                    >
-                      <option value="all">全部推广</option>
-                      <option value="site_wide">货品全站推</option>
-                      <option value="keyword">关键词推广</option>
-                      <option value="audience">人群推广</option>
-                      <option value="content">内容推广</option>
-                    </select>
-                  </div>
-
-                  {/* Date Filter */}
-                  <div className="flex flex-wrap items-center gap-4">
-                    <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
-                      <button 
-                        onClick={() => setQuickDate('yesterday')}
-                        className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${activeRange === 'yesterday' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                      >
-                        昨天
-                      </button>
-                      <button 
-                        onClick={() => setQuickDate('week')}
-                        className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${activeRange === 'week' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                      >
-                        本周
-                      </button>
-                      <button 
-                        onClick={() => setQuickDate('month')}
-                        className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${activeRange === 'month' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                      >
-                        本月
-                      </button>
-                      <button 
-                        onClick={() => setQuickDate('custom')}
-                        className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${activeRange === 'custom' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                      >
-                        自定义
-                      </button>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <Calendar className="w-4 h-4 text-slate-400" />
-                      <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg p-1 px-3">
-                        <input 
-                          type="date" 
-                          value={startDate}
-                          onChange={(e) => setStartDate(e.target.value)}
-                          className="bg-transparent border-none text-sm text-slate-700 focus:ring-0 outline-none p-1"
-                        />
-                        <span className="text-slate-400 text-xs font-bold">/</span>
-                        <input 
-                          type="date" 
-                          value={endDate}
-                          onChange={(e) => setEndDate(e.target.value)}
-                          className="bg-transparent border-none text-sm text-slate-700 focus:ring-0 outline-none p-1"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Stats Overview */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 gap-4 mb-8">
-                <StatCard 
-                  title="支出" 
-                  value={`¥${totals.spend.toLocaleString()}`} 
-                  icon={<DollarSign className="w-4 h-4 text-indigo-600" />}
-                  trend="+12.5%"
-                  color="indigo"
-                />
-                <StatCard 
-                  title="平均投产 (ROI)" 
-                  value={totals.avgRoi.toFixed(2)} 
-                  icon={<Target className="w-4 h-4 text-emerald-600" />}
-                  trend="+5.2%"
-                  color="emerald"
-                />
-                <StatCard 
-                  title="点击量" 
-                  value={totals.clicks.toLocaleString()} 
-                  icon={<MousePointerClick className="w-4 h-4 text-blue-600" />}
-                  trend="+8.1%"
-                  color="blue"
-                />
-                <StatCard 
-                  title="平均点击率" 
-                  value={`${totals.ctr.toFixed(2)}%`} 
-                  icon={<Eye className="w-4 h-4 text-orange-600" />}
-                  trend="+1.2%"
-                  color="orange"
-                />
-                <StatCard 
-                  title="转化率" 
-                  value={`${totals.conversionRate.toFixed(2)}%`} 
-                  icon={<Percent className="w-4 h-4 text-violet-600" />}
-                  trend="+2.4%"
-                  color="violet"
-                />
-                <StatCard 
-                  title="平均点击单价" 
-                  value={`¥${totals.avgCpc.toFixed(2)}`} 
-                  icon={<Activity className="w-4 h-4 text-rose-600" />}
-                  trend="-1.2%"
-                  color="rose"
-                />
-                <StatCard 
-                  title="购物车" 
-                  value={totals.cart.toLocaleString()} 
-                  icon={<ShoppingCart className="w-4 h-4 text-cyan-600" />}
-                  trend="+15.3%"
-                  color="cyan"
-                />
-                <StatCard 
-                  title="链接总数" 
-                  value={filteredData.length.toString()} 
-                  icon={<TrendingUp className="w-4 h-4 text-amber-600" />}
-                  trend="稳定"
-                  color="amber"
-                />
-              </div>
-
-              {/* Main Chart Section */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.99 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2 }}
-              >
-                {filteredData.length > 0 ? (
-                  selectedLinkId ? (
-                    <LinkTrendChart 
-                      linkId={selectedLinkId} 
-                      data={MOCK_DATA.filter(d => d.shopId === selectedShop)} // Show trend across all dates for this shop
-                      onBack={() => setSelectedLinkId(null)} 
-                    />
-                  ) : (
-                    <SpendRoiChart 
-                      data={filteredData} 
-                      onSelectLink={(id) => setSelectedLinkId(id)}
-                    />
-                  )
-                ) : (
-                  <div className="premium-card p-24 flex flex-col items-center justify-center text-slate-400">
-                    <BarChart3 className="w-16 h-16 mb-6 opacity-20" />
-                    <p className="text-lg font-medium">暂无数据</p>
-                  </div>
-                )}
-              </motion.div>
-            </main>
-          </>
+          <PromotionDashboard />
         ) : activePage === 'image_space' ? (
             <>
               {/* Header for Image Space */}
@@ -336,7 +57,7 @@ export default function App() {
                       {/* Form Header */}
                       <div className="px-5 py-4 bg-slate-50/50 border-b border-slate-100 flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-200">
+                          <div className="w-9 h-9 bg-brand-600 rounded-xl flex items-center justify-center shadow-lg shadow-brand-200">
                             <ClipboardList className="w-4 h-4 text-white" />
                           </div>
                           <div>
@@ -350,7 +71,7 @@ export default function App() {
                         {/* Section 1: Basic Metadata */}
                         <div className="space-y-3">
                           <div className="flex items-center gap-2 mb-1">
-                            <div className="w-1 h-3 bg-indigo-500 rounded-full"></div>
+                            <div className="w-1 h-3 bg-brand-500 rounded-full"></div>
                             <h3 className="text-[10px] font-bold text-slate-700 uppercase tracking-wider">基础信息</h3>
                           </div>
                           <div className="space-y-3">
@@ -359,7 +80,7 @@ export default function App() {
                               <select 
                                 value={requester}
                                 onChange={(e) => setRequester(e.target.value)}
-                                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-[11px] focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all hover:border-slate-300"
+                                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-[11px] focus:ring-2 focus:ring-brand-500/20 outline-none transition-all hover:border-slate-300"
                               >
                                 <option>张三</option>
                                 <option>李四</option>
@@ -373,7 +94,7 @@ export default function App() {
                                 type="date"
                                 value={submissionTime}
                                 onChange={(e) => setSubmissionTime(e.target.value)}
-                                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-[11px] focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all hover:border-slate-300"
+                                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-[11px] focus:ring-2 focus:ring-brand-500/20 outline-none transition-all hover:border-slate-300"
                               />
                             </div>
                             <div className="space-y-1">
@@ -381,7 +102,7 @@ export default function App() {
                               <select 
                                 value={sharedCategory}
                                 onChange={(e) => setSharedCategory(e.target.value)}
-                                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-[11px] focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all hover:border-slate-300"
+                                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-[11px] focus:ring-2 focus:ring-brand-500/20 outline-none transition-all hover:border-slate-300"
                               >
                                 <option>泳池</option>
                                 <option>泳圈</option>
@@ -399,10 +120,10 @@ export default function App() {
                                   readOnly
                                   value={productName}
                                   onClick={() => setIsProductModalOpen(true)}
-                                  className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-[11px] focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all cursor-pointer hover:bg-white hover:border-indigo-300" 
+                                  className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-[11px] focus:ring-2 focus:ring-brand-500/20 outline-none transition-all cursor-pointer hover:bg-white hover:border-brand-300" 
                                   placeholder="选择产品" 
                                 />
-                                <Search className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-300 group-hover:text-indigo-500 transition-colors" />
+                                <Search className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-300 group-hover:text-brand-500 transition-colors" />
                               </div>
                             </div>
                           </div>
@@ -411,7 +132,7 @@ export default function App() {
                         {/* Section 2: Content & Strategy */}
                         <div className="space-y-3">
                           <div className="flex items-center gap-2 mb-1">
-                            <div className="w-1 h-3 bg-indigo-500 rounded-full"></div>
+                            <div className="w-1 h-3 bg-brand-500 rounded-full"></div>
                             <h3 className="text-[10px] font-bold text-slate-700 uppercase tracking-wider">内容策略</h3>
                           </div>
                           <div className="bg-slate-50/50 border border-slate-100 rounded-xl p-3">
@@ -419,8 +140,8 @@ export default function App() {
                             <div className="flex flex-wrap gap-1">
                               {sharedStrategyWords.length > 0 ? (
                                 sharedStrategyWords.map((word, idx) => (
-                                  <span key={idx} className="px-2 py-0.5 bg-white text-indigo-600 text-[9px] font-bold rounded-full border border-indigo-100 shadow-sm flex items-center gap-1">
-                                    <span className="w-0.5 h-0.5 bg-indigo-400 rounded-full"></span>
+                                  <span key={idx} className="px-2 py-0.5 bg-white text-brand-600 text-[9px] font-bold rounded-full border border-brand-100 shadow-sm flex items-center gap-1">
+                                    <span className="w-0.5 h-0.5 bg-brand-400 rounded-full"></span>
                                     {word}
                                   </span>
                                 ))
@@ -434,7 +155,7 @@ export default function App() {
                         {/* Section 3: Visual References */}
                         <div className="space-y-3">
                           <div className="flex items-center gap-2 mb-1">
-                            <div className="w-1 h-3 bg-indigo-500 rounded-full"></div>
+                            <div className="w-1 h-3 bg-brand-500 rounded-full"></div>
                             <h3 className="text-[10px] font-bold text-slate-700 uppercase tracking-wider">视觉参考</h3>
                           </div>
                           <div className="space-y-3">
@@ -444,7 +165,7 @@ export default function App() {
                               <div 
                                 onClick={() => document.getElementById('style-upload')?.click()}
                                 className={`relative w-full aspect-video rounded-xl border-2 border-dashed flex flex-col items-center justify-center group transition-all cursor-pointer overflow-hidden ${
-                                  styleReferenceImage ? 'border-indigo-500 bg-indigo-50/10' : 'border-slate-200 bg-slate-50/50 hover:border-indigo-400 hover:bg-indigo-50/30'
+                                  styleReferenceImage ? 'border-brand-500 bg-brand-50/10' : 'border-slate-200 bg-slate-50/50 hover:border-brand-400 hover:bg-brand-50/30'
                                 }`}
                               >
                                 <input id="style-upload" type="file" accept="image/*" className="hidden" onChange={(e) => {
@@ -458,15 +179,15 @@ export default function App() {
                                 {styleReferenceImage ? (
                                   <>
                                     <img src={styleReferenceImage} alt="Style" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                                    <div className="absolute inset-0 bg-indigo-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
-                                      <p className="text-white text-[8px] font-bold bg-indigo-600 px-2 py-1 rounded-full shadow-lg">更换</p>
+                                    <div className="absolute inset-0 bg-brand-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
+                                      <p className="text-white text-[8px] font-bold bg-brand-600 px-2 py-1 rounded-full shadow-lg">更换</p>
                                     </div>
                                     <button onClick={(e) => { e.stopPropagation(); setStyleReferenceImage(null); }} className="absolute top-1.5 right-1.5 p-1 bg-white/90 hover:bg-rose-500 hover:text-white text-slate-400 rounded shadow-lg transition-all">
                                       <Trash2 className="w-2.5 h-2.5" />
                                     </button>
                                   </>
                                 ) : (
-                                  <ImageIcon className="w-4 h-4 text-slate-300 group-hover:text-indigo-500 transition-colors" />
+                                  <ImageIcon className="w-4 h-4 text-slate-300 group-hover:text-brand-500 transition-colors" />
                                 )}
                               </div>
                             </div>
@@ -477,7 +198,7 @@ export default function App() {
                               <div 
                                 onClick={() => document.getElementById('layout-upload')?.click()}
                                 className={`relative w-full aspect-video rounded-xl border-2 border-dashed flex flex-col items-center justify-center group transition-all cursor-pointer overflow-hidden ${
-                                  layoutReferenceImage ? 'border-indigo-500 bg-indigo-50/10' : 'border-slate-200 bg-slate-50/50 hover:border-indigo-400 hover:bg-indigo-50/30'
+                                  layoutReferenceImage ? 'border-brand-500 bg-brand-50/10' : 'border-slate-200 bg-slate-50/50 hover:border-brand-400 hover:bg-brand-50/30'
                                 }`}
                               >
                                 <input id="layout-upload" type="file" accept="image/*" className="hidden" onChange={(e) => {
@@ -491,15 +212,15 @@ export default function App() {
                                 {layoutReferenceImage ? (
                                   <>
                                     <img src={layoutReferenceImage} alt="Layout" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                                    <div className="absolute inset-0 bg-indigo-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
-                                      <p className="text-white text-[8px] font-bold bg-indigo-600 px-2 py-1 rounded-full shadow-lg">更换</p>
+                                    <div className="absolute inset-0 bg-brand-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
+                                      <p className="text-white text-[8px] font-bold bg-brand-600 px-2 py-1 rounded-full shadow-lg">更换</p>
                                     </div>
                                     <button onClick={(e) => { e.stopPropagation(); setLayoutReferenceImage(null); }} className="absolute top-1.5 right-1.5 p-1 bg-white/90 hover:bg-rose-500 hover:text-white text-slate-400 rounded shadow-lg transition-all">
                                       <Trash2 className="w-2.5 h-2.5" />
                                     </button>
                                   </>
                                 ) : (
-                                  <ImageIcon className="w-4 h-4 text-slate-300 group-hover:text-indigo-500 transition-colors" />
+                                  <ImageIcon className="w-4 h-4 text-slate-300 group-hover:text-brand-500 transition-colors" />
                                 )}
                               </div>
                             </div>
@@ -510,7 +231,7 @@ export default function App() {
                               <div 
                                 onClick={() => document.getElementById('product-upload')?.click()}
                                 className={`relative w-full aspect-video rounded-xl border-2 border-dashed flex flex-col items-center justify-center group transition-all cursor-pointer overflow-hidden ${
-                                  productReferenceImage ? 'border-indigo-500 bg-indigo-50/10' : 'border-slate-200 bg-slate-50/50 hover:border-indigo-400 hover:bg-indigo-50/30'
+                                  productReferenceImage ? 'border-brand-500 bg-brand-50/10' : 'border-slate-200 bg-slate-50/50 hover:border-brand-400 hover:bg-brand-50/30'
                                 }`}
                               >
                                 <input id="product-upload" type="file" accept="image/*" className="hidden" onChange={(e) => {
@@ -524,15 +245,15 @@ export default function App() {
                                 {productReferenceImage ? (
                                   <>
                                     <img src={productReferenceImage} alt="Product" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                                    <div className="absolute inset-0 bg-indigo-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
-                                      <p className="text-white text-[8px] font-bold bg-indigo-600 px-2 py-1 rounded-full shadow-lg">更换</p>
+                                    <div className="absolute inset-0 bg-brand-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
+                                      <p className="text-white text-[8px] font-bold bg-brand-600 px-2 py-1 rounded-full shadow-lg">更换</p>
                                     </div>
                                     <button onClick={(e) => { e.stopPropagation(); setProductReferenceImage(null); }} className="absolute top-1.5 right-1.5 p-1 bg-white/90 hover:bg-rose-500 hover:text-white text-slate-400 rounded shadow-lg transition-all">
                                       <Trash2 className="w-2.5 h-2.5" />
                                     </button>
                                   </>
                                 ) : (
-                                  <ImageIcon className="w-4 h-4 text-slate-300 group-hover:text-indigo-500 transition-colors" />
+                                  <ImageIcon className="w-4 h-4 text-slate-300 group-hover:text-brand-500 transition-colors" />
                                 )}
                               </div>
                             </div>
@@ -541,7 +262,7 @@ export default function App() {
 
                         {/* Form Footer Actions */}
                         <div className="pt-4 border-t border-slate-100 space-y-2">
-                          <button className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg text-xs font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200">
+                          <button className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-brand-600 text-white rounded-lg text-xs font-bold hover:bg-brand-700 transition-all shadow-lg shadow-brand-200">
                             <Sparkles className="w-3.5 h-3.5" />
                             <span>提交需求</span>
                           </button>
@@ -735,7 +456,7 @@ export default function App() {
               <p className="text-lg font-medium">该模块正在开发中...</p>
               <button 
                 onClick={() => setActivePage('dashboard')}
-                className="mt-4 text-indigo-600 font-bold hover:underline"
+                className="mt-4 text-brand-600 font-bold hover:underline"
               >
                 返回驾驶舱
               </button>
@@ -762,7 +483,7 @@ export default function App() {
             >
               <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
                 <div className="flex items-center gap-3">
-                  <div className="bg-indigo-600 p-2 rounded-xl shadow-lg shadow-indigo-600/20">
+                  <div className="bg-brand-600 p-2 rounded-xl shadow-lg shadow-brand-600/20">
                     <ShoppingCart className="text-white w-5 h-5" />
                   </div>
                   <h3 className="text-lg font-bold text-slate-800">选择产品</h3>
@@ -779,7 +500,7 @@ export default function App() {
                 {PRODUCT_LIBRARY.map((group) => (
                   <div key={group.category} className="space-y-4">
                     <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                      <span className="w-1 h-3 bg-indigo-500 rounded-full"></span>
+                      <span className="w-1 h-3 bg-brand-500 rounded-full"></span>
                       {group.category}
                     </h4>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -791,7 +512,7 @@ export default function App() {
                             setProductReferenceImage(product.image);
                             setIsProductModalOpen(false);
                           }}
-                          className="group flex flex-col items-center p-3 rounded-2xl border border-slate-100 hover:border-indigo-200 hover:bg-indigo-50/30 transition-all text-center"
+                          className="group flex flex-col items-center p-3 rounded-2xl border border-slate-100 hover:border-brand-200 hover:bg-brand-50/30 transition-all text-center"
                         >
                           <div className="w-full aspect-square rounded-xl overflow-hidden mb-3 border border-slate-100 group-hover:shadow-md transition-all">
                             <img 
@@ -801,7 +522,7 @@ export default function App() {
                               referrerPolicy="no-referrer"
                             />
                           </div>
-                          <span className="text-xs font-bold text-slate-700 group-hover:text-indigo-600 transition-colors line-clamp-1">
+                          <span className="text-xs font-bold text-slate-700 group-hover:text-brand-600 transition-colors line-clamp-1">
                             {product.name}
                           </span>
                         </button>
@@ -816,36 +537,5 @@ export default function App() {
       </AnimatePresence>
     </div>
   </div>
-  );
-}
-
-function StatCard({ title, value, icon, trend, color }: { title: string, value: string, icon: React.ReactNode, trend: string, color: string }) {
-  const colorMap: Record<string, string> = {
-    indigo: 'bg-indigo-50 border-indigo-100',
-    emerald: 'bg-emerald-50 border-emerald-100',
-    amber: 'bg-amber-50 border-amber-100',
-    rose: 'bg-rose-50 border-rose-100',
-    blue: 'bg-blue-50 border-blue-100',
-    violet: 'bg-violet-50 border-violet-100',
-    orange: 'bg-orange-50 border-orange-100',
-    cyan: 'bg-cyan-50 border-cyan-100',
-  };
-
-  return (
-    <motion.div 
-      whileHover={{ y: -4, backgroundColor: 'rgba(255,255,255,0.8)' }}
-      className="premium-card p-5 transition-all"
-    >
-      <div className="flex justify-between items-start mb-4">
-        <div className={`p-2.5 rounded-xl border ${colorMap[color]}`}>
-          {icon}
-        </div>
-        <span className="text-[10px] font-bold text-slate-400 tracking-widest uppercase">{trend}</span>
-      </div>
-      <div>
-        <h4 className="text-xs font-semibold text-slate-500 mb-1.5 truncate uppercase tracking-wider">{title}</h4>
-        <p className="text-xl font-bold text-slate-800 tracking-tight">{value}</p>
-      </div>
-    </motion.div>
   );
 }

@@ -18,118 +18,107 @@ export const SpendRoiChart: React.FC<SpendRoiChartProps> = ({ data, onSelectLink
   const maxRoi = useMemo(() => Math.max(...data.map(d => d.roi), 1), [data]);
 
   return (
-    <div className="w-full premium-card p-8">
-      <div className="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+    <div className="w-full premium-card overflow-hidden">
+      <div className="p-6 border-b border-slate-100 bg-slate-50/30 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h3 className="text-xl font-bold text-slate-800 tracking-tight">花费与投产对比分析</h3>
-          <p className="text-sm text-slate-500 mt-2">按花费金额从高到低排序，点击行查看该链接趋势波动</p>
+          <h3 className="text-lg font-bold text-slate-800 tracking-tight">花费与投产对比分析</h3>
+          <p className="text-xs text-slate-500 mt-1">按花费金额降序排列，点击行查看趋势详情</p>
         </div>
-        <div className="flex flex-wrap gap-6 text-[10px] font-bold uppercase tracking-widest">
-          <div className="flex items-center gap-2.5">
-            <div className="w-2.5 h-2.5 bg-indigo-600 rounded-full"></div>
-            <span className="text-indigo-600">花费 (Spend)</span>
+        <div className="flex flex-wrap gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-brand-500 rounded-full"></div>
+            <span className="data-label">花费</span>
           </div>
-          <div className="flex items-center gap-2.5">
-            <div className="w-2.5 h-2.5 bg-emerald-600 rounded-full"></div>
-            <span className="text-emerald-600">投产 (ROI)</span>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+            <span className="data-label">ROI</span>
           </div>
-          <div className="flex items-center gap-2.5">
-            <div className="w-2.5 h-2.5 bg-red-600 rounded-full"></div>
-            <span className="text-red-600">危险预警 (ROI &lt; 3.5)</span>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-rose-500 rounded-full"></div>
+            <span className="data-label">预警 (ROI &lt; 3.5)</span>
           </div>
         </div>
       </div>
 
-      {/* Header Row */}
-      <div className="grid grid-cols-[120px_100px_1fr_120px] gap-6 mb-6 px-4 border-b border-slate-100 pb-4">
-        <div className="text-left text-[10px] font-bold text-slate-400 uppercase tracking-widest">链接 ID</div>
-        <div className="text-right text-[10px] font-bold text-slate-400 uppercase tracking-widest">花费金额</div>
-        <div className="text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">对比分析 (花费 vs ROI)</div>
-        <div className="text-left text-[10px] font-bold text-slate-400 uppercase tracking-widest">ROI 表现</div>
-      </div>
-
-      {/* Data Rows */}
-      <div className="space-y-1.5 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
-        {sortedData.map((item, index) => {
-          const isLowRoi = item.roi < 3.5;
-          return (
-            <motion.div 
-              key={item.linkId}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.02 }}
-              onClick={() => onSelectLink(item.linkId)}
-              className={`grid grid-cols-[120px_100px_1fr_120px] gap-6 items-center group p-3 rounded-xl transition-all cursor-pointer border ${
-                isLowRoi 
-                  ? 'bg-red-50 border-red-200 hover:bg-red-100 hover:border-red-300' 
-                  : 'border-transparent hover:bg-slate-50 hover:border-slate-200'
-              }`}
-            >
-              {/* Link ID (Far Left) */}
-              <div className="text-left">
-                <span className={`text-[11px] font-mono font-bold transition-colors tracking-tight ${
-                  isLowRoi ? 'text-red-700' : 'text-slate-500 group-hover:text-indigo-600'
-                }`}>
-                  {item.linkId}
-                </span>
-              </div>
-
-              {/* Spend Value (Left of the bar) */}
-              <div className="text-right">
-                <span className="text-xs font-bold text-indigo-600 tabular-nums">
-                  ¥{item.spend.toLocaleString()}
-                </span>
-              </div>
-
-              {/* Bars Container (Spend and ROI bars touching in the middle) */}
-              <div className="flex items-center h-5">
-                {/* Spend Bar (Grows right to left) */}
-                <div className="flex-1 h-full bg-slate-100 rounded-l-lg overflow-hidden flex justify-end">
-                  <motion.div 
-                    initial={{ width: 0 }}
-                    animate={{ width: `${(item.spend / maxSpend) * 100}%` }}
-                    transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-                    className="h-full bg-indigo-500 group-hover:bg-indigo-600 transition-colors"
-                  />
-                </div>
-                
-                {/* Center Divider */}
-                <div className="w-[1px] h-full bg-slate-200 z-10" />
-
-                {/* ROI Bar (Grows left to right) */}
-                <div className="flex-1 h-full bg-slate-100 rounded-r-lg overflow-hidden">
-                  <motion.div 
-                    initial={{ width: 0 }}
-                    animate={{ width: `${(item.roi / maxRoi) * 100}%` }}
-                    transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-                    className="h-full bg-emerald-500 group-hover:bg-emerald-600 transition-colors"
-                  />
-                </div>
-              </div>
-
-              {/* ROI Value (Far Right) */}
-              <div className="text-left flex items-center gap-3">
-                <span className={`text-xs font-bold tabular-nums ${isLowRoi ? 'text-red-600' : 'text-emerald-600'}`}>
-                  {item.roi.toFixed(2)}
-                </span>
-                {isLowRoi && (
-                  <motion.div
-                    initial={{ scale: 0, rotate: -20 }}
-                    animate={{ scale: 1, rotate: 0 }}
-                    className="text-red-500"
-                  >
-                    <AlertTriangle className="w-3.5 h-3.5" />
-                  </motion.div>
-                )}
-              </div>
-            </motion.div>
-          );
-        })}
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse">
+          <thead>
+            <tr className="border-b border-slate-100">
+              <th className="px-6 py-4 text-left data-label w-[140px]">链接 ID</th>
+              <th className="px-6 py-4 text-right data-label w-[120px]">花费金额</th>
+              <th className="px-6 py-4 text-center data-label">对比分析 (Spend vs ROI)</th>
+              <th className="px-6 py-4 text-left data-label w-[140px]">ROI 表现</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-50">
+            {sortedData.map((item, index) => {
+              const isLowRoi = item.roi < 3.5;
+              return (
+                <motion.tr 
+                  key={item.linkId}
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.03 }}
+                  onClick={() => onSelectLink(item.linkId)}
+                  className={`group cursor-pointer transition-colors ${
+                    isLowRoi ? 'bg-rose-50/30 hover:bg-rose-50/60' : 'hover:bg-slate-50/80'
+                  }`}
+                >
+                  <td className="px-6 py-4">
+                    <span className={`text-[11px] font-mono font-bold tracking-tight ${
+                      isLowRoi ? 'text-rose-700' : 'text-slate-500 group-hover:text-brand-600'
+                    }`}>
+                      {item.linkId}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-right">
+                    <span className="text-xs font-bold text-brand-600 tabular-nums">
+                      ¥{item.spend.toLocaleString()}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center h-4 max-w-[400px] mx-auto">
+                      <div className="flex-1 h-full bg-slate-100/50 rounded-l-sm overflow-hidden flex justify-end">
+                        <motion.div 
+                          initial={{ width: 0 }}
+                          animate={{ width: `${(item.spend / maxSpend) * 100}%` }}
+                          transition={{ duration: 1, ease: "easeOut" }}
+                          className="h-full bg-brand-400 group-hover:bg-brand-500 transition-colors"
+                        />
+                      </div>
+                      <div className="w-[2px] h-full bg-white z-10" />
+                      <div className="flex-1 h-full bg-slate-100/50 rounded-r-sm overflow-hidden">
+                        <motion.div 
+                          initial={{ width: 0 }}
+                          animate={{ width: `${(item.roi / maxRoi) * 100}%` }}
+                          transition={{ duration: 1, ease: "easeOut" }}
+                          className={`h-full transition-colors ${
+                            isLowRoi ? 'bg-rose-400 group-hover:bg-rose-500' : 'bg-emerald-400 group-hover:bg-emerald-500'
+                          }`}
+                        />
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-2">
+                      <span className={`text-xs font-bold tabular-nums ${isLowRoi ? 'text-rose-600' : 'text-emerald-600'}`}>
+                        {item.roi.toFixed(2)}
+                      </span>
+                      {isLowRoi && (
+                        <AlertTriangle className="w-3 h-3 text-rose-500" />
+                      )}
+                    </div>
+                  </td>
+                </motion.tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
 
       {sortedData.length === 0 && (
         <div className="py-20 text-center text-slate-400">
-          <p>暂无对比数据</p>
+          <p className="text-sm">暂无对比数据</p>
         </div>
       )}
     </div>
