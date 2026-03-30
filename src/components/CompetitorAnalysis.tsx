@@ -11,6 +11,7 @@ import {
   AreaChart,
   Area
 } from 'recharts';
+import * as XLSX from 'xlsx';
 import { 
   Search, 
   Upload, 
@@ -33,6 +34,7 @@ import {
   Edit2,
   LineChart,
   Copy,
+  CheckSquare,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -411,7 +413,7 @@ const MOCK_COMPETITORS: CompetitorData[] = [
     isBillionSubsidy: true,
     isBlackLabel: true
   },
-  ...Array.from({ length: 50 }).map((_, i) => {
+  ...Array.from({ length: 150 }).map((_, i) => {
     const id = (i + 6).toString();
     const shopNames = ['优品家居馆', '生活美学社', '居家达人', '萌宝玩具城', '酷玩户外', '吱凡旗舰店', '益伟家居旗舰店', '格威索旗舰店', '灰狐卫浴旗舰店', '娜拉之夏旗舰店'];
     const categories = ['卫浴/置物', '戏水玩具', '婴儿游泳池', '充气玩具', '收纳/清洁'];
@@ -1189,11 +1191,124 @@ export function CompetitorAnalysis() {
   const [selectedChartField, setSelectedChartField] = useState<'dailySales' | 'usagePrice' | 'maxPrice' | 'starCustomerPrice'>('dailySales');
   const [selectedXAxisField, setSelectedXAxisField] = useState<'date' | 'productName'>('productName');
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 20;
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  const [exportFileName, setExportFileName] = useState('');
+
+  // Reset page when filters change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [
+    selectedPlatform, 
+    searchQuery, 
+    selectedDateFilter, 
+    pickedDate, 
+    selectedCategoryFilter, 
+    selectedShopFilter, 
+    selectedListingDateFilter, 
+    pickedListingDate,
+    selectedMaterialFilter,
+    minPriceFilter,
+    maxPriceFilter,
+    minMaxPriceFilter,
+    maxMaxPriceFilter,
+    minStarCustomerPriceFilter,
+    maxStarCustomerPriceFilter,
+    minDailySalesFilter,
+    maxDailySalesFilter,
+    billionSubsidyFilter,
+    blackLabelFilter,
+    selectedCategory
+  ]);
+
+  const toggleSelectAll = () => {
+    const currentPageIds = paginatedCompetitors.map(item => item.id);
+    const allCurrentPageSelected = currentPageIds.every(id => selectedIds.has(id));
+    
+    const newSelected = new Set(selectedIds);
+    if (allCurrentPageSelected && currentPageIds.length > 0) {
+      currentPageIds.forEach(id => newSelected.delete(id));
+    } else {
+      currentPageIds.forEach(id => newSelected.add(id));
+    }
+    setSelectedIds(newSelected);
+  };
+
+  const selectAllFilteredData = () => {
+    if (selectedIds.size === filteredCompetitors.length && filteredCompetitors.length > 0) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(filteredCompetitors.map(item => item.id)));
+    }
+  };
+
+  const toggleSelect = (id: string) => {
+    const newSelected = new Set(selectedIds);
+    if (newSelected.has(id)) {
+      newSelected.delete(id);
+    } else {
+      newSelected.add(id);
+    }
+    setSelectedIds(newSelected);
+  };
 
   const handleCopy = (id: string, text: string) => {
     navigator.clipboard.writeText(text);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
+  };
+
+  const handleExport = () => {
+    const dataToExport = selectedIds.size > 0 
+      ? filteredCompetitors.filter(item => selectedIds.has(item.id))
+      : filteredCompetitors;
+
+    if (dataToExport.length === 0) {
+      alert('没有可导出的数据');
+      return;
+    }
+
+    const defaultName = `竞品分析_${selectedPlatform}_${new Date().toISOString().split('T')[0]}`;
+    setExportFileName(defaultName);
+    setIsExportModalOpen(true);
+  };
+
+  const confirmExport = () => {
+    const dataToExport = selectedIds.size > 0 
+      ? filteredCompetitors.filter(item => selectedIds.has(item.id))
+      : filteredCompetitors;
+
+    const exportData = dataToExport.map((item, index) => ({
+      '序号': index + 1,
+      '日期': item.date,
+      '二级分类': item.secondaryCategory,
+      '店铺名称': item.shopName,
+      '上架时间': item.listingTime,
+      '商品名称': item.productName,
+      '商品链接': item.link,
+      '商品图片': item.productImage,
+      '材质': item.material,
+      '露出价': item.usagePrice,
+      '最高价': item.maxPrice,
+      '预估客单价': item.starCustomerPrice,
+      '日销量': item.dailySales,
+      '是否百亿': item.isBillionSubsidy ? '是' : '否',
+      '是否黑标': item.isBlackLabel ? '是' : '否'
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, '竞品分析');
+    
+    // Ensure filename ends with .xlsx
+    const finalFileName = exportFileName.toLowerCase().endsWith('.xlsx') 
+      ? exportFileName 
+      : `${exportFileName}.xlsx`;
+      
+    XLSX.writeFile(workbook, finalFileName);
+    setIsExportModalOpen(false);
   };
 
   const dateFilterOptions = ['全部', '指定日期', '昨天', '本周', '上周', '本月', '上月', '今年', '去年'];
@@ -1455,6 +1570,12 @@ export function CompetitorAnalysis() {
     return b.sales - a.sales;
   });
 
+  const totalPages = Math.ceil(filteredCompetitors.length / pageSize);
+  const paginatedCompetitors = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredCompetitors.slice(start, start + pageSize);
+  }, [filteredCompetitors, currentPage, pageSize]);
+
   return (
     <div className="flex flex-col h-full bg-slate-50/50">
       {/* Top Filter Bar */}
@@ -1646,10 +1767,13 @@ export function CompetitorAnalysis() {
                   <div>
                     <h3 className="text-xl font-bold text-slate-800 flex items-center gap-2">
                       <LineChart className="w-5 h-5 text-brand-600" />
-                      {selectedChartField === 'dailySales' ? '销量趋势分析' : 
-                       selectedChartField === 'usagePrice' ? '价格分布分析 (露出价)' :
-                       selectedChartField === 'maxPrice' ? '价格分布分析 (最高价)' : '客单价分析'}
-                      <span className="text-sm font-normal text-slate-400 ml-2">(Top 10 竞品)</span>
+                      {selectedPlatform === '拼多多' ? '销售趋势看版' : (
+                        selectedChartField === 'dailySales' ? '销量趋势分析' : 
+                        selectedChartField === 'usagePrice' ? '价格分布分析 (露出价)' :
+                        selectedChartField === 'maxPrice' ? '价格分布分析 (最高价)' : '客单价分析'
+                      )}
+                      {selectedPlatform !== '拼多多' && <span className="text-sm font-normal text-slate-400 ml-2">(Top 10 竞品)</span>}
+                      {selectedPlatform === '拼多多' && <span className="text-sm font-normal text-slate-400 ml-2">(样本量: {filteredCompetitors.length})</span>}
                     </h3>
                     <p className="text-sm text-slate-500 mt-1">
                       {selectedChartField === 'dailySales' ? '基于当前筛选条件的竞品日销量对比' : 
@@ -1725,7 +1849,7 @@ export function CompetitorAnalysis() {
                   {filteredCompetitors.length > 0 ? (
                     <ResponsiveContainer width="100%" height="100%">
                       <RechartsLineChart
-                        data={filteredCompetitors.slice(0, 10).map(item => ({
+                        data={(selectedPlatform === '拼多多' ? filteredCompetitors : filteredCompetitors.slice(0, 10)).map(item => ({
                           name: selectedXAxisField === 'date' 
                             ? item.date 
                             : (item.productName.length > 10 ? item.productName.substring(0, 10) + '...' : item.productName),
@@ -1836,9 +1960,6 @@ export function CompetitorAnalysis() {
                       <span className="text-xs text-slate-500">样本量: {filteredCompetitors.length}</span>
                     </div>
                   </div>
-                  <div className="text-xs text-slate-400 font-medium italic">
-                    * 仅展示当前筛选条件下的前 10 名竞品数据
-                  </div>
                 </div>
               </div>
             </div>
@@ -1847,11 +1968,19 @@ export function CompetitorAnalysis() {
               <table className="w-full border-collapse text-left">
               <thead className="sticky top-0 bg-slate-50 z-10 border-b border-slate-200">
                 <tr>
-                  <th className="p-4 w-10">
-                    <input type="checkbox" className="rounded border-slate-300 text-brand-600 focus:ring-brand-500" />
-                  </th>
                   {selectedPlatform === '拼多多' ? (
                     <>
+                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider w-24">
+                        <div className="flex items-center gap-2">
+                          <input 
+                            type="checkbox" 
+                            className="rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+                            checked={paginatedCompetitors.length > 0 && paginatedCompetitors.every(item => selectedIds.has(item.id))}
+                            onChange={toggleSelectAll}
+                          />
+                          <span>序号</span>
+                        </div>
+                      </th>
                       <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider relative">
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-1">
@@ -2796,6 +2925,14 @@ export function CompetitorAnalysis() {
                     </>
                   ) : (
                     <>
+                      <th className="p-4 w-10">
+                        <input 
+                          type="checkbox" 
+                          className="rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+                          checked={paginatedCompetitors.length > 0 && paginatedCompetitors.every(item => selectedIds.has(item.id))}
+                          onChange={toggleSelectAll}
+                        />
+                      </th>
                       <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">商品</th>
                       <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">店铺</th>
                       <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">排名</th>
@@ -2810,17 +2947,27 @@ export function CompetitorAnalysis() {
                       <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">发货地</th>
                     </>
                   )}
-                  <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">操作</th>
+                  {selectedPlatform !== '拼多多' && (
+                    <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">操作</th>
+                  )}
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {filteredCompetitors.map((item) => (
-                  <tr key={item.id} className="hover:bg-slate-50/50 transition-colors group">
-                    <td className="p-4">
-                      <input type="checkbox" className="rounded border-slate-300 text-brand-600 focus:ring-brand-500" />
-                    </td>
+                {paginatedCompetitors.map((item, index) => (
+                  <tr key={item.id} className={`hover:bg-slate-50/50 transition-colors group ${selectedIds.has(item.id) ? 'bg-brand-50/30' : ''}`}>
                     {selectedPlatform === '拼多多' ? (
                       <>
+                        <td className="p-4">
+                          <div className="flex items-center gap-3">
+                            <input 
+                              type="checkbox" 
+                              className="rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+                              checked={selectedIds.has(item.id)}
+                              onChange={() => toggleSelect(item.id)}
+                            />
+                            <span className="text-xs text-slate-500 font-medium">{(currentPage - 1) * pageSize + index + 1}</span>
+                          </div>
+                        </td>
                         <td className="p-4 text-xs text-slate-600 whitespace-nowrap">{item.date}</td>
                         <td className="p-4 text-xs text-slate-600 whitespace-nowrap">{item.secondaryCategory}</td>
                         <td className="p-4">
@@ -2885,6 +3032,14 @@ export function CompetitorAnalysis() {
                     ) : (
                       <>
                         <td className="p-4">
+                          <input 
+                            type="checkbox" 
+                            className="rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+                            checked={selectedIds.has(item.id)}
+                            onChange={() => toggleSelect(item.id)}
+                          />
+                        </td>
+                        <td className="p-4">
                           <div className="flex items-center gap-3 min-w-[240px]">
                             <img src={item.productImage} alt="" className="w-10 h-10 rounded-lg object-cover border border-slate-100" referrerPolicy="no-referrer" />
                             <span className="text-xs font-medium text-slate-700 line-clamp-2 leading-relaxed">{item.productName}</span>
@@ -2946,11 +3101,13 @@ export function CompetitorAnalysis() {
                         </td>
                       </>
                     )}
-                    <td className="p-4">
-                      <button className="text-xs font-bold text-brand-600 hover:text-brand-700 hover:underline transition-all">
-                        测算
-                      </button>
-                    </td>
+                    {selectedPlatform !== '拼多多' && (
+                      <td className="p-4">
+                        <button className="text-xs font-bold text-brand-600 hover:text-brand-700 hover:underline transition-all">
+                          测算
+                        </button>
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>
@@ -2958,14 +3115,160 @@ export function CompetitorAnalysis() {
           </div>
           )}
 
+          {/* Pagination */}
+          {filteredCompetitors.length > 0 && (
+            <div className="px-6 py-4 border-t border-slate-100 bg-white flex items-center justify-between">
+              <div className="text-xs text-slate-500">
+                共 <span className="font-bold text-slate-700">{filteredCompetitors.length}</span> 条数据，
+                展示第 <span className="font-bold text-slate-700">{(currentPage - 1) * pageSize + 1}</span> 到 <span className="font-bold text-slate-700">{Math.min(currentPage * pageSize, filteredCompetitors.length)}</span> 条
+                {selectedIds.size > 0 && (
+                  <>，已选中 <span className="font-bold text-brand-600">{selectedIds.size}</span> 条</>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                  disabled={currentPage === 1}
+                  className="p-2 border border-slate-200 rounded-lg text-slate-400 hover:text-brand-600 hover:bg-brand-50 disabled:opacity-50 disabled:hover:bg-transparent transition-all"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: Math.min(5, totalPages) }).map((_, i) => {
+                    let pageNum;
+                    if (totalPages <= 5) {
+                      pageNum = i + 1;
+                    } else if (currentPage <= 3) {
+                      pageNum = i + 1;
+                    } else if (currentPage >= totalPages - 2) {
+                      pageNum = totalPages - 4 + i;
+                    } else {
+                      pageNum = currentPage - 2 + i;
+                    }
+                    
+                    return (
+                      <button
+                        key={pageNum}
+                        onClick={() => setCurrentPage(pageNum)}
+                        className={`w-8 h-8 flex items-center justify-center rounded-lg text-xs font-bold transition-all ${
+                          currentPage === pageNum 
+                            ? 'bg-brand-600 text-white shadow-md shadow-brand-200' 
+                            : 'text-slate-500 hover:bg-slate-100'
+                        }`}
+                      >
+                        {pageNum}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <button 
+                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                  disabled={currentPage === totalPages}
+                  className="p-2 border border-slate-200 rounded-lg text-slate-400 hover:text-brand-600 hover:bg-brand-50 disabled:opacity-50 disabled:hover:bg-transparent transition-all"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
+
           {selectedPlatform === '拼多多' && (
             <div className="p-4 border-t border-slate-100 bg-slate-50/30 flex justify-end gap-3">
-              <button className="flex items-center gap-2 px-6 py-2 bg-white border border-slate-200 rounded-lg text-sm font-bold text-slate-600 hover:bg-slate-50 transition-all shadow-sm">
+              <button 
+                onClick={selectAllFilteredData}
+                className={`flex items-center gap-2 px-6 py-2 border rounded-lg text-sm font-bold transition-all shadow-sm ${
+                  selectedIds.size === filteredCompetitors.length && filteredCompetitors.length > 0
+                    ? 'bg-brand-50 border-brand-200 text-brand-600'
+                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                }`}
+              >
+                <CheckSquare className="w-4 h-4" />
+                全选所有数据
+              </button>
+              <button 
+                onClick={handleExport}
+                className="flex items-center gap-2 px-6 py-2 bg-white border border-slate-200 rounded-lg text-sm font-bold text-slate-600 hover:bg-slate-50 transition-all shadow-sm"
+              >
                 <Download className="w-4 h-4" />
                 导出表格
               </button>
             </div>
           )}
+
+          {/* Export Modal */}
+          <AnimatePresence>
+            {isExportModalOpen && (
+              <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                  className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+                >
+                  <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-brand-100 flex items-center justify-center text-brand-600">
+                        <Download className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-base font-bold text-slate-800">导出数据</h3>
+                        <p className="text-xs text-slate-500">设置文件名并导出为 Excel 表格</p>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={() => setIsExportModalOpen(false)}
+                      className="p-2 hover:bg-slate-200 rounded-lg transition-colors text-slate-400 hover:text-slate-600"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  <div className="p-6 space-y-4">
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-slate-500 ml-1">文件名</label>
+                      <div className="relative">
+                        <input 
+                          type="text" 
+                          value={exportFileName}
+                          onChange={(e) => setExportFileName(e.target.value)}
+                          placeholder="请输入文件名"
+                          className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all pr-12"
+                        />
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">.xlsx</div>
+                      </div>
+                    </div>
+
+                    <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 flex gap-3">
+                      <div className="text-amber-500 shrink-0 mt-0.5">
+                        <Settings className="w-4 h-4" />
+                      </div>
+                      <div className="text-xs text-amber-700 leading-relaxed">
+                        <span className="font-bold">提示：</span>
+                        浏览器将根据您的设置，在下载时弹出位置选择对话框或直接保存到默认下载目录。
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-6 bg-slate-50/50 border-t border-slate-100 flex gap-3">
+                    <button 
+                      onClick={() => setIsExportModalOpen(false)}
+                      className="flex-1 px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-50 transition-all"
+                    >
+                      取消
+                    </button>
+                    <button 
+                      onClick={confirmExport}
+                      className="flex-1 px-4 py-2.5 bg-brand-600 text-white rounded-xl text-sm font-bold hover:bg-brand-700 transition-all shadow-lg shadow-brand-200"
+                    >
+                      确认导出
+                    </button>
+                  </div>
+                </motion.div>
+              </div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </div>
