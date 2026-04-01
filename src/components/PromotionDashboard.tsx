@@ -86,25 +86,25 @@ export function PromotionDashboard() {
   return (
     <>
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-md border-b border-slate-200/60 sticky top-0 z-20 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+      <header className="bg-white/80 backdrop-blur-md border-b border-surface-border sticky top-0 z-20 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
         <div className="px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 bg-brand-600 rounded-xl flex items-center justify-center shadow-lg shadow-brand-200">
+            <div className="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center shadow-lg shadow-primary-200">
               <LayoutDashboard className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-lg font-bold tracking-tight text-slate-900">推广驾驶舱</h1>
+              <h1 className="text-lg font-bold tracking-tight text-secondary-900">推广驾驶舱</h1>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">数据看板</span>
-                <div className="w-1 h-1 bg-slate-300 rounded-full"></div>
-                <span className="text-[10px] font-bold text-brand-600 uppercase tracking-wider">核心推广指标</span>
+                <span className="text-[10px] font-bold text-secondary-400 uppercase tracking-wider">数据看板</span>
+                <div className="w-1 h-1 bg-secondary-300 rounded-full"></div>
+                <span className="text-[10px] font-bold text-primary-600 uppercase tracking-wider">核心推广指标</span>
               </div>
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg">
-              <Calendar className="w-3.5 h-3.5 text-slate-400" />
-              <span className="text-xs font-bold text-slate-600 tabular-nums">
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-surface-bg border border-surface-border rounded-lg">
+              <Calendar className="w-3.5 h-3.5 text-surface-muted" />
+              <span className="text-xs font-bold text-secondary-600 tabular-nums">
                 {format(new Date(), 'yyyy / MM / dd')}
               </span>
             </div>
@@ -117,7 +117,7 @@ export function PromotionDashboard() {
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="premium-card p-4 mb-8 bg-slate-50/50 border-slate-200/40"
+          className="premium-card p-4 mb-8 bg-surface-bg/50 border-surface-border/40"
         >
           <div className="flex flex-wrap items-center justify-between gap-6">
             <div className="flex flex-wrap items-center gap-6">
@@ -125,11 +125,11 @@ export function PromotionDashboard() {
               <div className="space-y-1.5">
                 <label className="data-label ml-1">所属店铺</label>
                 <div className="relative">
-                  <Store className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                  <Store className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-surface-muted" />
                   <select 
                     value={selectedShop}
                     onChange={(e) => setSelectedShop(e.target.value)}
-                    className="pl-9 pr-8 py-2 bg-white border border-slate-200 text-xs font-bold text-slate-700 rounded-xl focus:ring-2 focus:ring-brand-500/20 outline-none transition-all hover:border-brand-300 appearance-none cursor-pointer"
+                    className="pl-9 pr-8 py-2 bg-surface-card border border-surface-border text-xs font-bold text-secondary-700 rounded-xl focus:ring-2 focus:ring-primary-500/20 outline-none transition-all hover:border-primary-300 appearance-none cursor-pointer"
                   >
                     {SHOPS.map(shop => (
                       <option key={shop.id} value={shop.id}>{shop.name}</option>
@@ -142,11 +142,11 @@ export function PromotionDashboard() {
               <div className="space-y-1.5">
                 <label className="data-label ml-1">推广类型</label>
                 <div className="relative">
-                  <Tag className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                  <Tag className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-surface-muted" />
                   <select 
                     value={selectedPromotion}
                     onChange={(e) => setSelectedPromotion(e.target.value as PromotionType)}
-                    className="pl-9 pr-8 py-2 bg-white border border-slate-200 text-xs font-bold text-slate-700 rounded-xl focus:ring-2 focus:ring-brand-500/20 outline-none transition-all hover:border-brand-300 appearance-none cursor-pointer"
+                    className="pl-9 pr-8 py-2 bg-surface-card border border-surface-border text-xs font-bold text-secondary-700 rounded-xl focus:ring-2 focus:ring-primary-500/20 outline-none transition-all hover:border-primary-300 appearance-none cursor-pointer"
                   >
                     <option value="all">全部推广</option>
                     <option value="site_wide">货品全站推</option>
@@ -157,21 +157,21 @@ export function PromotionDashboard() {
                 </div>
               </div>
 
-              <div className="h-10 w-[1px] bg-slate-200 hidden lg:block"></div>
+              <div className="h-10 w-[1px] bg-surface-border hidden lg:block"></div>
 
               {/* Date Filter */}
               <div className="space-y-1.5">
                 <label className="data-label ml-1">时间范围</label>
                 <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-200 shadow-sm">
+                  <div className="flex items-center gap-1 bg-surface-card p-1 rounded-xl border border-surface-border shadow-sm">
                     {['yesterday', 'week', 'month', 'custom'].map((type) => (
                       <button 
                         key={type}
                         onClick={() => setQuickDate(type as any)}
                         className={`px-3 py-1.5 text-[10px] font-bold rounded-lg transition-all ${
                           activeRange === type 
-                            ? 'bg-brand-600 text-white shadow-md shadow-brand-200' 
-                            : 'text-slate-500 hover:bg-slate-50'
+                            ? 'bg-primary-600 text-white shadow-md shadow-primary-200' 
+                            : 'text-surface-muted hover:bg-secondary-50'
                         }`}
                       >
                         {type === 'yesterday' ? '昨天' : type === 'week' ? '本周' : type === 'month' ? '本月' : '自定义'}
@@ -179,19 +179,19 @@ export function PromotionDashboard() {
                     ))}
                   </div>
 
-                  <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-xl px-3 py-1.5 shadow-sm">
+                  <div className="flex items-center gap-2 bg-surface-card border border-surface-border rounded-xl px-3 py-1.5 shadow-sm">
                     <input 
                       type="date" 
                       value={startDate}
                       onChange={(e) => setStartDate(e.target.value)}
-                      className="bg-transparent border-none text-[11px] font-bold text-slate-600 focus:ring-0 outline-none cursor-pointer"
+                      className="bg-transparent border-none text-[11px] font-bold text-secondary-600 focus:ring-0 outline-none cursor-pointer"
                     />
-                    <span className="text-slate-300 text-xs font-bold">—</span>
+                    <span className="text-surface-muted text-xs font-bold">—</span>
                     <input 
                       type="date" 
                       value={endDate}
                       onChange={(e) => setEndDate(e.target.value)}
-                      className="bg-transparent border-none text-[11px] font-bold text-slate-600 focus:ring-0 outline-none cursor-pointer"
+                      className="bg-transparent border-none text-[11px] font-bold text-secondary-600 focus:ring-0 outline-none cursor-pointer"
                     />
                   </div>
                 </div>
@@ -199,12 +199,12 @@ export function PromotionDashboard() {
             </div>
 
             <div className="flex flex-col items-end">
-              <button className="flex items-center gap-2 px-5 py-2.5 bg-brand-600 text-white rounded-xl text-sm font-bold hover:bg-brand-700 transition-all shadow-lg shadow-brand-200 group active:scale-95">
+              <button className="flex items-center gap-2 px-5 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-bold hover:bg-primary-700 transition-all shadow-lg shadow-primary-200 group active:scale-95">
                 <Download className="w-4 h-4 transition-transform group-hover:-translate-y-0.5" />
                 <span>导出分析报告</span>
               </button>
-              <p className="mt-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+              <p className="mt-2 text-[10px] font-bold text-secondary-400 uppercase tracking-widest flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 bg-success-500 rounded-full animate-pulse"></span>
                 数据实时更新中 • {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </p>
             </div>
@@ -216,14 +216,14 @@ export function PromotionDashboard() {
           <StatCard 
             title="支出" 
             value={`¥${totals.spend.toLocaleString()}`} 
-            icon={<DollarSign className="w-4 h-4 text-brand-600" />}
+            icon={<DollarSign className="w-4 h-4 text-primary-600" />}
             trend="+12.5%"
             color="brand"
           />
           <StatCard 
             title="平均投产 (ROI)" 
             value={totals.avgRoi.toFixed(2)} 
-            icon={<Target className="w-4 h-4 text-emerald-600" />}
+            icon={<Target className="w-4 h-4 text-success-600" />}
             trend="+5.2%"
             color="emerald"
           />
@@ -291,7 +291,7 @@ export function PromotionDashboard() {
               />
             )
           ) : (
-            <div className="premium-card p-24 flex flex-col items-center justify-center text-slate-400">
+            <div className="premium-card p-24 flex flex-col items-center justify-center text-surface-muted">
               <BarChart3 className="w-16 h-16 mb-6 opacity-20" />
               <p className="text-lg font-medium">暂无数据</p>
             </div>

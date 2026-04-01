@@ -4,28 +4,28 @@ import { Upload, Download, ChevronDown, Filter, Layers, Search, Users, Briefcase
 import { GoogleGenAI } from "@google/genai";
 
 const STRATEGY_COLUMNS = [
-  { title: '人群需求', color: 'bg-brand-50/50 text-brand-700', icon: Users },
-  { title: '搜索人气', color: 'bg-slate-50/50 text-slate-400', icon: Search },
+  { title: '人群需求', color: 'bg-primary-50/50 text-primary-700', icon: Users },
+  { title: '搜索人气', color: 'bg-surface-bg/50 text-surface-muted', icon: Search },
   { title: '使用需求', color: 'bg-blue-50/50 text-blue-700', icon: Layers },
-  { title: '搜索人气', color: 'bg-slate-50/50 text-slate-400', icon: Search },
-  { title: '其他需求', color: 'bg-purple-50/50 text-purple-700', icon: Sparkles },
-  { title: '搜索人气', color: 'bg-slate-50/50 text-slate-400', icon: Search },
-  { title: '功能需求', color: 'bg-brand-50/50 text-brand-700', icon: Briefcase },
-  { title: '搜索人气', color: 'bg-slate-50/50 text-slate-400', icon: Search },
+  { title: '搜索人气', color: 'bg-surface-bg/50 text-surface-muted', icon: Search },
+  { title: '其他需求', color: 'bg-violet-50/50 text-violet-700', icon: Sparkles },
+  { title: '搜索人气', color: 'bg-surface-bg/50 text-surface-muted', icon: Search },
+  { title: '功能需求', color: 'bg-primary-50/50 text-primary-700', icon: Briefcase },
+  { title: '搜索人气', color: 'bg-surface-bg/50 text-surface-muted', icon: Search },
   { title: '品牌需求', color: 'bg-blue-50/50 text-blue-700', icon: Tag },
-  { title: '搜索人气', color: 'bg-slate-50/50 text-slate-400', icon: Search },
-  { title: '品类需求', color: 'bg-purple-50/50 text-purple-700', icon: Layers },
-  { title: '搜索人气', color: 'bg-slate-50/50 text-slate-400', icon: Search },
-  { title: '场景需求', color: 'bg-brand-50/50 text-brand-700', icon: Clock },
-  { title: '搜索人气', color: 'bg-slate-50/50 text-slate-400', icon: Search },
+  { title: '搜索人气', color: 'bg-surface-bg/50 text-surface-muted', icon: Search },
+  { title: '品类需求', color: 'bg-violet-50/50 text-violet-700', icon: Layers },
+  { title: '搜索人气', color: 'bg-surface-bg/50 text-surface-muted', icon: Search },
+  { title: '场景需求', color: 'bg-primary-50/50 text-primary-700', icon: Clock },
+  { title: '搜索人气', color: 'bg-surface-bg/50 text-surface-muted', icon: Search },
   { title: '属性需求', color: 'bg-blue-50/50 text-blue-700', icon: Tag },
-  { title: '搜索人气', color: 'bg-slate-50/50 text-slate-400', icon: Search },
-  { title: '时间状态需求', color: 'bg-purple-50/50 text-purple-700', icon: Clock },
-  { title: '搜索人气', color: 'bg-slate-50/50 text-slate-400', icon: Search },
-  { title: '渠道官方背书需求', color: 'bg-brand-50/50 text-brand-700', icon: ShieldCheck },
-  { title: '搜索人气', color: 'bg-slate-50/50 text-slate-400', icon: Search },
+  { title: '搜索人气', color: 'bg-surface-bg/50 text-surface-muted', icon: Search },
+  { title: '时间状态需求', color: 'bg-violet-50/50 text-violet-700', icon: Clock },
+  { title: '搜索人气', color: 'bg-surface-bg/50 text-surface-muted', icon: Search },
+  { title: '渠道官方背书需求', color: 'bg-primary-50/50 text-primary-700', icon: ShieldCheck },
+  { title: '搜索人气', color: 'bg-surface-bg/50 text-surface-muted', icon: Search },
   { title: '营销修饰词需求', color: 'bg-blue-50/50 text-blue-700', icon: Sparkles },
-  { title: '搜索人气', color: 'bg-slate-50/50 text-slate-400', icon: Search },
+  { title: '搜索人气', color: 'bg-surface-bg/50 text-surface-muted', icon: Search },
 ];
 
 const MOCK_STRATEGY_DATA = [
@@ -135,7 +135,7 @@ export function StrategyMap({ onSendToImageSpace }: StrategyMapProps) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#F8FAFC] p-6 overflow-hidden">
+    <div className="flex flex-col h-full bg-surface-bg p-6 overflow-hidden">
       {/* Filters Section - Unified with App.tsx */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
@@ -145,32 +145,32 @@ export function StrategyMap({ onSendToImageSpace }: StrategyMapProps) {
         <div className="flex flex-wrap items-center justify-between gap-6">
           <div className="flex flex-wrap items-center gap-8">
             <div className="flex items-center gap-3">
-              <div className="bg-slate-100 p-2 rounded-full border border-slate-200">
-                <Filter className="w-4 h-4 text-brand-600" />
+              <div className="bg-secondary-100 p-2 rounded-full border border-surface-border">
+                <Filter className="w-4 h-4 text-primary-600" />
               </div>
-              <span className="text-sm font-semibold text-slate-700">筛选条件</span>
+              <span className="text-sm font-semibold text-secondary-700">筛选条件</span>
             </div>
 
-            <div className="h-8 w-[1px] bg-slate-200 hidden md:block"></div>
+            <div className="h-8 w-[1px] bg-surface-border hidden md:block"></div>
 
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">平台</span>
+              <span className="text-xs font-bold text-surface-muted uppercase tracking-wider">平台</span>
               <div className="relative">
-                <select className="appearance-none bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-all hover:bg-white">
+                <select className="appearance-none bg-surface-bg border border-surface-border rounded-lg px-4 py-2 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-all hover:bg-surface-card">
                   <option>淘系平台</option>
                   <option>1688平台</option>
                 </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-muted pointer-events-none" />
               </div>
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">类目</span>
+              <span className="text-xs font-bold text-surface-muted uppercase tracking-wider">类目</span>
               <div className="relative">
                 <select 
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="appearance-none bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-all hover:bg-white"
+                  className="appearance-none bg-surface-bg border border-surface-border rounded-lg px-4 py-2 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-all hover:bg-surface-card"
                 >
                   <option>泳池</option>
                   <option>泳圈</option>
@@ -179,19 +179,19 @@ export function StrategyMap({ onSendToImageSpace }: StrategyMapProps) {
                   <option>泡澡桶</option>
                   <option>洗脚桶</option>
                 </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-muted pointer-events-none" />
               </div>
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">时间</span>
-              <div className="flex items-center bg-slate-50 border border-slate-200 rounded-lg divide-x divide-slate-200 focus-within:ring-2 focus-within:ring-brand-500/20 transition-all hover:bg-white">
+              <span className="text-xs font-bold text-surface-muted uppercase tracking-wider">时间</span>
+              <div className="flex items-center bg-surface-bg border border-surface-border rounded-lg divide-x divide-surface-border focus-within:ring-2 focus-within:ring-primary-500/20 transition-all hover:bg-surface-card">
                 <div className="relative">
                   <select className="appearance-none bg-transparent pl-4 pr-10 py-2 text-sm focus:outline-none transition-all">
                     <option>2025年</option>
                     <option>2026年</option>
                   </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-muted pointer-events-none" />
                 </div>
                 <div className="relative">
                   <select className="appearance-none bg-transparent pl-4 pr-10 py-2 text-sm focus:outline-none transition-all">
@@ -208,18 +208,18 @@ export function StrategyMap({ onSendToImageSpace }: StrategyMapProps) {
                     <option>11月</option>
                     <option>12月</option>
                   </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-muted pointer-events-none" />
                 </div>
               </div>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <button className="flex items-center gap-2 px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-all">
+            <button className="flex items-center gap-2 px-4 py-2 border border-surface-border rounded-lg text-sm font-medium text-secondary-600 hover:bg-surface-bg transition-all">
               <Upload className="w-4 h-4" />
               <span>上传数据</span>
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-brand-600 text-white rounded-lg text-sm font-medium hover:bg-brand-700 transition-all shadow-sm shadow-brand-200">
+            <button className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition-all shadow-sm shadow-primary-200">
               <Download className="w-4 h-4" />
               <span>导出报表</span>
             </button>
@@ -232,10 +232,10 @@ export function StrategyMap({ onSendToImageSpace }: StrategyMapProps) {
         {/* Strategy Matrix Section */}
         <section>
           <div className="flex items-center gap-2 mb-4">
-            <div className="bg-brand-100 p-1.5 rounded-lg">
-              <Layers className="w-4 h-4 text-brand-600" />
+            <div className="bg-primary-100 p-1.5 rounded-lg">
+              <Layers className="w-4 h-4 text-primary-600" />
             </div>
-            <h3 className="text-lg font-bold text-slate-800">战略矩阵</h3>
+            <h3 className="text-lg font-bold text-secondary-800">战略矩阵</h3>
           </div>
           <motion.div 
             initial={{ opacity: 0, scale: 0.99 }}
@@ -245,12 +245,12 @@ export function StrategyMap({ onSendToImageSpace }: StrategyMapProps) {
             <div className="flex-1 overflow-auto custom-scrollbar">
               <table className="w-full border-collapse table-fixed min-w-[2200px]">
                 <thead>
-                  <tr className="border-b border-slate-100">
+                  <tr className="border-b border-surface-border">
                     {STRATEGY_COLUMNS.map((col, idx) => {
                       return (
                         <th 
                           key={idx}
-                          className={`sticky top-0 z-10 p-3 text-center border-r border-slate-100/50 ${col.color}`}
+                          className={`sticky top-0 z-10 p-3 text-center border-r border-surface-border/50 ${col.color}`}
                         >
                           <div className="flex flex-col items-center">
                             <span className="text-sm font-bold uppercase tracking-wider whitespace-nowrap">
@@ -262,9 +262,9 @@ export function StrategyMap({ onSendToImageSpace }: StrategyMapProps) {
                     })}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-50">
+                <tbody className="divide-y divide-secondary-50">
                   {MOCK_STRATEGY_DATA.map((row, rowIdx) => (
-                    <tr key={rowIdx} className="hover:bg-slate-50/80 transition-colors group">
+                    <tr key={rowIdx} className="hover:bg-surface-bg/80 transition-colors group">
                       {row.map((cell, cellIdx) => {
                         const isWord = cellIdx % 2 === 0;
                         const isSelected = isWord && selectedWords.includes(cell);
@@ -272,12 +272,12 @@ export function StrategyMap({ onSendToImageSpace }: StrategyMapProps) {
                           <td 
                             key={cellIdx}
                             onClick={() => isWord && toggleWord(cell)}
-                            className={`p-2.5 text-center text-xs border-r border-slate-100/30 tabular-nums transition-all ${
+                            className={`p-2.5 text-center text-xs border-r border-surface-border/30 tabular-nums transition-all ${
                               !isWord 
-                                ? 'text-slate-400 font-normal bg-slate-50/10' 
+                                ? 'text-surface-muted font-normal bg-surface-bg/10' 
                                 : isSelected
-                                  ? 'bg-brand-600 text-white font-bold cursor-pointer'
-                                  : 'text-slate-700 font-medium group-hover:text-brand-600 cursor-pointer hover:bg-brand-50'
+                                  ? 'bg-primary-600 text-white font-bold cursor-pointer'
+                                  : 'text-secondary-700 font-medium group-hover:text-primary-600 cursor-pointer hover:bg-primary-50'
                             }`}
                           >
                             {cell}
@@ -296,18 +296,18 @@ export function StrategyMap({ onSendToImageSpace }: StrategyMapProps) {
         <section>
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <div className="bg-amber-100 p-1.5 rounded-lg">
-                <Lightbulb className="w-4 h-4 text-amber-600" />
+              <div className="bg-warning-100 p-1.5 rounded-lg">
+                <Lightbulb className="w-4 h-4 text-warning-600" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-slate-800">市场机会挖掘</h3>
-                <p className="text-xs text-slate-500">通过交叉分析人群、使用及其他需求，发现未被满足的市场空白点</p>
+                <h3 className="text-lg font-bold text-secondary-800">市场机会挖掘</h3>
+                <p className="text-xs text-surface-muted">通过交叉分析人群、使用及其他需求，发现未被满足的市场空白点</p>
               </div>
             </div>
             <button
               onClick={handleDiscoverOpportunities}
               disabled={isDiscovering}
-              className="flex items-center gap-2 px-6 py-2.5 bg-brand-600 text-white rounded-xl font-bold hover:bg-brand-700 transition-all shadow-lg shadow-brand-200 disabled:opacity-50"
+              className="flex items-center gap-2 px-6 py-2.5 bg-primary-600 text-white rounded-xl font-bold hover:bg-primary-700 transition-all shadow-lg shadow-primary-200 disabled:opacity-50"
             >
               {isDiscovering ? (
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -327,11 +327,11 @@ export function StrategyMap({ onSendToImageSpace }: StrategyMapProps) {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     whileHover={{ y: -5 }}
-                    className="premium-card p-6 border-l-4 border-l-brand-500 flex flex-col h-full"
+                    className="premium-card p-6 border-l-4 border-l-primary-500 flex flex-col h-full"
                   >
                     <div className="flex justify-between items-start mb-4">
-                      <h4 className="text-lg font-bold text-slate-800">{opp.title}</h4>
-                      <div className="flex items-center gap-1 px-2 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-bold">
+                      <h4 className="text-lg font-bold text-secondary-800">{opp.title}</h4>
+                      <div className="flex items-center gap-1 px-2 py-1 bg-success-50 text-success-600 rounded-lg text-xs font-bold">
                         <TrendingUpIcon className="w-3 h-3" />
                         {opp.score}%
                       </div>
@@ -343,34 +343,34 @@ export function StrategyMap({ onSendToImageSpace }: StrategyMapProps) {
                           <Users className="w-4 h-4 text-blue-600" />
                         </div>
                         <div>
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">目标人群</p>
-                          <p className="text-sm text-slate-700 font-medium">{opp.audience}</p>
+                          <p className="text-[10px] font-bold text-surface-muted uppercase tracking-wider">目标人群</p>
+                          <p className="text-sm text-secondary-700 font-medium">{opp.audience}</p>
                         </div>
                       </div>
 
                       <div className="flex items-start gap-3">
-                        <div className="p-1.5 bg-brand-50 rounded-lg shrink-0">
-                          <Layers className="w-4 h-4 text-brand-600" />
+                        <div className="p-1.5 bg-primary-50 rounded-lg shrink-0">
+                          <Layers className="w-4 h-4 text-primary-600" />
                         </div>
                         <div>
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">使用需求</p>
-                          <p className="text-sm text-slate-700 font-medium">{opp.usage}</p>
+                          <p className="text-[10px] font-bold text-surface-muted uppercase tracking-wider">使用需求</p>
+                          <p className="text-sm text-secondary-700 font-medium">{opp.usage}</p>
                         </div>
                       </div>
 
                       <div className="flex items-start gap-3">
-                        <div className="p-1.5 bg-purple-50 rounded-lg shrink-0">
-                          <Sparkles className="w-4 h-4 text-purple-600" />
+                        <div className="p-1.5 bg-violet-50 rounded-lg shrink-0">
+                          <Sparkles className="w-4 h-4 text-violet-600" />
                         </div>
                         <div>
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">其他需求搭配</p>
-                          <p className="text-sm text-slate-700 font-medium">{opp.other}</p>
+                          <p className="text-[10px] font-bold text-surface-muted uppercase tracking-wider">其他需求搭配</p>
+                          <p className="text-sm text-secondary-700 font-medium">{opp.other}</p>
                         </div>
                       </div>
 
-                      <div className="mt-4 p-3 bg-slate-50 rounded-xl border border-slate-100">
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">机会点分析</p>
-                        <p className="text-xs text-slate-600 leading-relaxed italic">"{opp.reason}"</p>
+                      <div className="mt-4 p-3 bg-surface-bg rounded-xl border border-surface-border">
+                        <p className="text-[10px] font-bold text-surface-muted uppercase tracking-wider mb-1">机会点分析</p>
+                        <p className="text-xs text-secondary-600 leading-relaxed italic">"{opp.reason}"</p>
                       </div>
                     </div>
 
@@ -380,7 +380,7 @@ export function StrategyMap({ onSendToImageSpace }: StrategyMapProps) {
                         setSelectedWords(words);
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                       }}
-                      className="mt-6 w-full py-2.5 bg-slate-50 hover:bg-brand-50 text-slate-600 hover:text-brand-600 rounded-xl text-xs font-bold transition-all border border-slate-100 hover:border-brand-100 flex items-center justify-center gap-2"
+                      className="mt-6 w-full py-2.5 bg-surface-bg hover:bg-primary-50 text-secondary-600 hover:text-primary-600 rounded-xl text-xs font-bold transition-all border border-surface-border hover:border-primary-100 flex items-center justify-center gap-2"
                     >
                       <Copy className="w-3.5 h-3.5" />
                       提取关键词并组合
@@ -389,11 +389,11 @@ export function StrategyMap({ onSendToImageSpace }: StrategyMapProps) {
                 ))}
               </div>
             ) : (
-              <div className="h-[300px] flex flex-col items-center justify-center text-slate-300 bg-white rounded-3xl border border-dashed border-slate-200">
-                <div className="p-6 bg-slate-50 rounded-full mb-4">
+              <div className="h-[300px] flex flex-col items-center justify-center text-surface-muted bg-surface-card rounded-3xl border border-dashed border-surface-border">
+                <div className="p-6 bg-surface-bg rounded-full mb-4">
                   <Zap className="w-12 h-12 opacity-20" />
                 </div>
-                <h4 className="text-lg font-bold text-slate-400">准备好发现新机会了吗？</h4>
+                <h4 className="text-lg font-bold text-surface-muted">准备好发现新机会了吗？</h4>
                 <p className="text-sm mt-2">点击右上角按钮，让 AI 为您分析市场空白点</p>
               </div>
             )}
@@ -405,29 +405,29 @@ export function StrategyMap({ onSendToImageSpace }: StrategyMapProps) {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="premium-card p-6 bg-white border-t-4 border-t-brand-500"
+        className="premium-card p-6 bg-surface-card border-t-4 border-t-primary-500"
       >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className="bg-brand-100 p-2 rounded-lg">
-              <Sparkles className="w-5 h-5 text-brand-600" />
+            <div className="bg-primary-100 p-2 rounded-lg">
+              <Sparkles className="w-5 h-5 text-primary-600" />
             </div>
-            <h3 className="text-lg font-bold text-slate-800">词根组合</h3>
-            <span className="text-xs text-slate-400 font-medium bg-slate-100 px-2 py-1 rounded">
+            <h3 className="text-lg font-bold text-secondary-800">词根组合</h3>
+            <span className="text-xs text-surface-muted font-medium bg-secondary-100 px-2 py-1 rounded">
               已选 {selectedWords.length} 个词
             </span>
-            <div className="h-4 w-[1px] bg-slate-200 mx-1"></div>
+            <div className="h-4 w-[1px] bg-surface-border mx-1"></div>
             <form onSubmit={handleAddCustomWord} className="flex items-center gap-2">
               <input 
                 type="text" 
                 value={customWord}
                 onChange={(e) => setCustomWord(e.target.value)}
                 placeholder="自定义词根..."
-                className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-brand-500/20 outline-none transition-all w-32"
+                className="bg-surface-bg border border-surface-border rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-primary-500/20 outline-none transition-all w-32"
               />
               <button 
                 type="submit"
-                className="p-1.5 bg-brand-50 text-brand-600 rounded-lg hover:bg-brand-100 transition-colors"
+                className="p-1.5 bg-primary-50 text-primary-600 rounded-lg hover:bg-primary-100 transition-colors"
               >
                 <Upload className="w-3.5 h-3.5 rotate-90" />
               </button>
@@ -436,7 +436,7 @@ export function StrategyMap({ onSendToImageSpace }: StrategyMapProps) {
           <div className="flex items-center gap-3">
             <button 
               onClick={() => setSelectedWords([])}
-              className="text-xs font-bold text-slate-400 hover:text-rose-500 transition-colors"
+              className="text-xs font-bold text-surface-muted hover:text-error-500 transition-colors"
             >
               清空选择
             </button>
@@ -445,8 +445,8 @@ export function StrategyMap({ onSendToImageSpace }: StrategyMapProps) {
               disabled={selectedWords.length === 0 || isGeneratingTitle}
               className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg ${
                 selectedWords.length > 0 
-                ? 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-emerald-200' 
-                : 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                ? 'bg-success-600 text-white hover:bg-success-700 shadow-success-200' 
+                : 'bg-secondary-100 text-surface-muted cursor-not-allowed'
               }`}
             >
               {isGeneratingTitle ? (
@@ -461,8 +461,8 @@ export function StrategyMap({ onSendToImageSpace }: StrategyMapProps) {
               disabled={selectedWords.length === 0}
               className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg ${
                 selectedWords.length > 0 
-                ? 'bg-brand-600 text-white hover:bg-brand-700 shadow-brand-200' 
-                : 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                ? 'bg-primary-600 text-white hover:bg-primary-700 shadow-primary-200' 
+                : 'bg-secondary-100 text-surface-muted cursor-not-allowed'
               }`}
             >
               <Download className="w-4 h-4 rotate-180" />
@@ -471,7 +471,7 @@ export function StrategyMap({ onSendToImageSpace }: StrategyMapProps) {
           </div>
         </div>
 
-        <div className="bg-slate-50/50 rounded-2xl p-6 border border-slate-100 min-h-[120px]">
+        <div className="bg-surface-bg/50 rounded-2xl p-6 border border-surface-border min-h-[120px]">
           <div className="flex flex-wrap gap-2">
             <AnimatePresence>
               {selectedWords.length > 0 ? (
@@ -481,19 +481,19 @@ export function StrategyMap({ onSendToImageSpace }: StrategyMapProps) {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-brand-100 rounded-full text-xs font-bold text-brand-600 shadow-sm group"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface-card border border-primary-100 rounded-full text-xs font-bold text-primary-600 shadow-sm group"
                   >
                     {word}
                     <button 
                       onClick={() => toggleWord(word)}
-                      className="hover:text-rose-500 transition-colors"
+                      className="hover:text-error-500 transition-colors"
                     >
                       <X className="w-3 h-3" />
                     </button>
                   </motion.span>
                 ))
               ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center text-slate-300 py-8">
+                <div className="w-full h-full flex flex-col items-center justify-center text-surface-muted py-8">
                   <Layers className="w-8 h-8 mb-2 opacity-20" />
                   <p className="text-sm">点击上方表格中的词语进行组合</p>
                 </div>
@@ -506,20 +506,20 @@ export function StrategyMap({ onSendToImageSpace }: StrategyMapProps) {
           <motion.div 
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
-            className="mt-4 p-4 bg-emerald-50 border border-emerald-100 rounded-2xl relative group"
+            className="mt-4 p-4 bg-success-50 border border-success-100 rounded-2xl relative group"
           >
             <div className="flex items-center gap-2 mb-2">
-              <Sparkles className="w-4 h-4 text-emerald-600" />
-              <span className="text-xs font-bold text-emerald-700">AI 生成标题建议</span>
+              <Sparkles className="w-4 h-4 text-success-600" />
+              <span className="text-xs font-bold text-success-700">AI 生成标题建议</span>
             </div>
-            <div className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">
+            <div className="text-sm text-secondary-700 leading-relaxed whitespace-pre-wrap">
               {generatedTitle}
             </div>
             <button 
               onClick={copyToClipboard}
-              className="absolute top-4 right-4 p-2 bg-white border border-emerald-100 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-all shadow-sm"
+              className="absolute top-4 right-4 p-2 bg-surface-card border border-success-100 rounded-lg text-success-600 hover:bg-success-50 transition-all shadow-sm"
             >
-              {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+              {copied ? <Check className="w-4 h-4 text-success-500" /> : <Copy className="w-4 h-4" />}
             </button>
           </motion.div>
         )}

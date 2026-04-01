@@ -37,6 +37,7 @@ import {
   CheckSquare,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { PddCategoryFilter } from './PddCategoryFilter';
 
 interface CompetitorData {
   id: string;
@@ -416,7 +417,7 @@ const MOCK_COMPETITORS: CompetitorData[] = [
   ...Array.from({ length: 150 }).map((_, i) => {
     const id = (i + 6).toString();
     const shopNames = ['优品家居馆', '生活美学社', '居家达人', '萌宝玩具城', '酷玩户外', '吱凡旗舰店', '益伟家居旗舰店', '格威索旗舰店', '灰狐卫浴旗舰店', '娜拉之夏旗舰店'];
-    const categories = ['卫浴/置物', '戏水玩具', '婴儿游泳池', '充气玩具', '收纳/清洁'];
+    const categories = ['圈类', '泳池', '皮划艇', '拍拍垫', '冲浪板', '雨衣', '雨鞋', '浮排', '垫冰', '泡澡桶', '泡脚桶', '滑雪圈', '床垫', '头枕', '沙发', '不倒翁', '浴盆', '学座椅', '球类'];
     const materials = ['环保PP+TPE', '加厚塑料', '优质PP', '环保TPE', 'PVC', '不锈钢', '实木'];
     const locations = ['上海', '浙江金华', '浙江杭州', '广东广州', '广东深圳', '江苏苏州', '北京'];
     const shopType = i % 3 === 0 ? '拼多多' : (i % 3 === 1 ? '天猫' : '京东');
@@ -464,27 +465,23 @@ interface CategoryNode {
 
 const CATEGORY_TREE: CategoryNode[] = [
   {
-    name: '玩具',
+    name: '夏季品',
     children: [
-      {
-        name: '运动、休闲、传统玩具',
-        children: [
-          { name: '戏水玩具' },
-          { name: '婴儿游泳池' }
-        ]
-      },
-      {
-        name: '充气玩具',
-        children: []
-      }
+      { name: '圈类' }, { name: '泳池' }, { name: '皮划艇' }, { name: '拍拍垫' }, { name: '冲浪板' }, { name: '雨衣' }, { name: '雨鞋' }, { name: '浮排' }, { name: '垫冰' }
     ]
   },
-  { name: '运动户外', children: [] },
-  { name: '收纳清洁用具', children: [] },
-  { name: '家纺家饰', children: [] },
-  { name: '家装建材', children: [] },
-  { name: '居家日用', children: [] },
-  { name: '宠物及园艺', children: [] },
+  {
+    name: '冬季品',
+    children: [
+      { name: '泡澡桶' }, { name: '泡脚桶' }, { name: '滑雪圈' }
+    ]
+  },
+  {
+    name: '四季品',
+    children: [
+      { name: '床垫' }, { name: '头枕' }, { name: '沙发' }, { name: '不倒翁' }, { name: '浴盆' }, { name: '学座椅' }, { name: '球类' }
+    ]
+  }
 ];
 
 function CategorySelector({ value, onChange, categories }: { value: string[]; onChange: (val: string[]) => void; categories: CategoryNode[] }) {
@@ -542,12 +539,12 @@ function CategorySelector({ value, onChange, categories }: { value: string[]; on
 
   return (
     <div className="relative" ref={containerRef}>
-      <div className="flex items-center border border-slate-200 rounded-lg overflow-hidden bg-white min-w-[240px]">
-        <div className="px-3 py-2 bg-slate-50 border-r border-slate-200 text-xs font-bold text-slate-500 whitespace-nowrap">类目</div>
+      <div className="flex items-center border border-secondary-200 rounded-lg overflow-hidden bg-white min-w-[240px]">
+        <div className="px-3 py-2 bg-secondary-50 border-r border-secondary-200 text-xs font-bold text-secondary-500 whitespace-nowrap">类目</div>
         <div className="relative flex-1 flex items-center">
           <input
             type="text"
-            className="w-full px-3 py-2 text-sm outline-none placeholder:text-slate-400"
+            className="w-full px-3 py-2 text-sm outline-none placeholder:text-secondary-400"
             placeholder={displayValue || "搜索或选择类目"}
             value={searchText}
             onChange={(e) => {
@@ -562,12 +559,12 @@ function CategorySelector({ value, onChange, categories }: { value: string[]; on
                 setSearchText('');
                 onChange(['全部类目']);
               }}
-              className="absolute right-8 p-1 hover:bg-slate-100 rounded-full"
+              className="absolute right-8 p-1 hover:bg-secondary-100 rounded-full"
             >
-              <X className="w-3 h-3 text-slate-400" />
+              <X className="w-3 h-3 text-secondary-400" />
             </button>
           )}
-          <ChevronDown className={`w-4 h-4 text-slate-400 mr-2 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+          <ChevronDown className={`w-4 h-4 text-secondary-400 mr-2 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
         </div>
       </div>
 
@@ -577,11 +574,11 @@ function CategorySelector({ value, onChange, categories }: { value: string[]; on
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
-            className="absolute top-full left-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-xl z-50 flex overflow-hidden min-w-[600px] h-[320px]"
+            className="absolute top-full left-0 mt-2 bg-white border border-secondary-200 rounded-xl shadow-xl z-50 flex overflow-hidden min-w-[600px] h-[320px]"
           >
             {searchText && filteredResults.length > 0 ? (
               <div className="flex-1 overflow-auto p-2">
-                <div className="text-[10px] font-bold text-slate-400 px-3 py-2 uppercase tracking-wider">搜索结果</div>
+                <div className="text-[10px] font-bold text-secondary-400 px-3 py-2 uppercase tracking-wider">搜索结果</div>
                 {filteredResults.map((res, idx) => {
                   const name = res.split(' > ').pop()!;
                   const isSelected = value.includes(name);
@@ -590,11 +587,11 @@ function CategorySelector({ value, onChange, categories }: { value: string[]; on
                       key={idx}
                       onClick={() => handleSelect(name)}
                       className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors flex items-center gap-2 ${
-                        isSelected ? 'bg-brand-50 text-brand-600 font-medium' : 'text-slate-600 hover:bg-slate-50'
+                        isSelected ? 'bg-primary-50 text-primary-600 font-medium' : 'text-secondary-600 hover:bg-secondary-50'
                       }`}
                     >
                       <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center transition-colors ${
-                        isSelected ? 'bg-brand-600 border-brand-600' : 'border-slate-300'
+                        isSelected ? 'bg-primary-600 border-primary-600' : 'border-secondary-300'
                       }`}>
                         {isSelected && <Check className="w-2.5 h-2.5 text-white" />}
                       </div>
@@ -606,23 +603,23 @@ function CategorySelector({ value, onChange, categories }: { value: string[]; on
             ) : (
               <>
                 {/* Level 1 */}
-                <div className="w-1/3 border-r border-slate-100 overflow-auto p-2 bg-slate-50/30">
+                <div className="w-1/3 border-r border-secondary-100 overflow-auto p-2 bg-secondary-50/30">
                   <button
                     onClick={() => handleSelect('全部类目')}
                     className={`w-full text-left px-4 py-2.5 text-sm rounded-lg transition-all flex items-center gap-2 mb-1 ${
                       value.includes('全部类目') 
-                        ? 'bg-brand-50 text-brand-600 font-medium' 
-                        : 'text-slate-600 hover:bg-slate-100'
+                        ? 'bg-primary-50 text-primary-600 font-medium' 
+                        : 'text-secondary-600 hover:bg-secondary-100'
                     }`}
                   >
                     <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center transition-colors ${
-                      value.includes('全部类目') ? 'bg-brand-600 border-brand-600' : 'border-slate-300'
+                      value.includes('全部类目') ? 'bg-primary-600 border-primary-600' : 'border-secondary-300'
                     }`}>
                       {value.includes('全部类目') && <Check className="w-2.5 h-2.5 text-white" />}
                     </div>
                     全部类目
                   </button>
-                  <div className="h-px bg-slate-100 my-1 mx-2" />
+                  <div className="h-px bg-secondary-100 my-1 mx-2" />
                   {categories.map((cat) => {
                     const isSelected = value.includes(cat.name);
                     return (
@@ -635,14 +632,14 @@ function CategorySelector({ value, onChange, categories }: { value: string[]; on
                         onClick={() => !cat.children?.length && handleSelect(cat.name)}
                         className={`w-full text-left px-4 py-2.5 text-sm rounded-lg transition-all flex items-center justify-between ${
                           activeL1?.name === cat.name 
-                            ? 'bg-brand-50 text-brand-600 font-medium' 
-                            : 'text-slate-600 hover:bg-slate-100'
+                            ? 'bg-primary-50 text-primary-600 font-medium' 
+                            : 'text-secondary-600 hover:bg-secondary-100'
                         }`}
                       >
                         <div className="flex items-center gap-2">
                           {!cat.children?.length && (
                             <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center transition-colors ${
-                              isSelected ? 'bg-brand-600 border-brand-600' : 'border-slate-300'
+                              isSelected ? 'bg-primary-600 border-primary-600' : 'border-secondary-300'
                             }`}>
                               {isSelected && <Check className="w-2.5 h-2.5 text-white" />}
                             </div>
@@ -656,7 +653,7 @@ function CategorySelector({ value, onChange, categories }: { value: string[]; on
                 </div>
 
                 {/* Level 2 */}
-                <div className="w-1/3 border-r border-slate-100 overflow-auto p-2">
+                <div className="w-1/3 border-r border-secondary-100 overflow-auto p-2">
                   {activeL1?.children?.map((cat) => {
                     const isSelected = value.includes(cat.name);
                     return (
@@ -666,14 +663,14 @@ function CategorySelector({ value, onChange, categories }: { value: string[]; on
                         onClick={() => !cat.children?.length && handleSelect(cat.name)}
                         className={`w-full text-left px-4 py-2.5 text-sm rounded-lg transition-all flex items-center justify-between ${
                           activeL2?.name === cat.name 
-                            ? 'bg-brand-50 text-brand-600 font-medium' 
-                            : 'text-slate-600 hover:bg-slate-100'
+                            ? 'bg-primary-50 text-primary-600 font-medium' 
+                            : 'text-secondary-600 hover:bg-secondary-100'
                         }`}
                       >
                         <div className="flex items-center gap-2">
                           {!cat.children?.length && (
                             <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center transition-colors ${
-                              isSelected ? 'bg-brand-600 border-brand-600' : 'border-slate-300'
+                              isSelected ? 'bg-primary-600 border-primary-600' : 'border-secondary-300'
                             }`}>
                               {isSelected && <Check className="w-2.5 h-2.5 text-white" />}
                             </div>
@@ -695,13 +692,13 @@ function CategorySelector({ value, onChange, categories }: { value: string[]; on
                         key={cat.name}
                         onClick={() => handleSelect(cat.name)}
                         className={`w-full text-left px-4 py-2.5 text-sm rounded-lg transition-all flex items-center gap-2 ${
-                          isSelected ? 'bg-brand-600 text-white shadow-md shadow-brand-200' : 'text-slate-600 hover:bg-brand-50 hover:text-brand-600'
+                          isSelected ? 'bg-primary-600 text-white shadow-md shadow-primary-200' : 'text-secondary-600 hover:bg-primary-50 hover:text-primary-600'
                         }`}
                       >
                         <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center transition-colors ${
-                          isSelected ? 'bg-white border-white' : 'border-slate-300'
+                          isSelected ? 'bg-white border-white' : 'border-secondary-300'
                         }`}>
-                          {isSelected && <Check className="w-2.5 h-2.5 text-brand-600" />}
+                          {isSelected && <Check className="w-2.5 h-2.5 text-primary-600" />}
                         </div>
                         {cat.name}
                       </button>
@@ -729,7 +726,6 @@ function CategoryManagementModal({
   onUpdate: (newCats: CategoryNode[]) => void 
 }) {
   const [activeL1Idx, setActiveL1Idx] = useState<number | null>(null);
-  const [activeL2Idx, setActiveL2Idx] = useState<number | null>(null);
   const [newItemName, setNewItemName] = useState('');
 
   if (!isOpen) return null;
@@ -744,63 +740,49 @@ function CategoryManagementModal({
     if (!newItemName || activeL1Idx === null) return;
     const newCats = [...categories];
     const parent = newCats[activeL1Idx];
-    parent.children = [...(parent.children || []), { name: newItemName, children: [] }];
+    parent.children = [...(parent.children || []), { name: newItemName }];
     onUpdate(newCats);
     setNewItemName('');
   };
 
-  const handleAddL3 = () => {
-    if (!newItemName || activeL1Idx === null || activeL2Idx === null) return;
-    const newCats = [...categories];
-    const l1 = newCats[activeL1Idx];
-    const l2 = l1.children![activeL2Idx];
-    l2.children = [...(l2.children || []), { name: newItemName }];
-    onUpdate(newCats);
-    setNewItemName('');
-  };
-
-  const handleDelete = (level: 1 | 2 | 3, idx: number) => {
+  const handleDelete = (level: 1 | 2, idx: number) => {
     const newCats = JSON.parse(JSON.stringify(categories));
     if (level === 1) {
       newCats.splice(idx, 1);
       setActiveL1Idx(null);
-      setActiveL2Idx(null);
     } else if (level === 2 && activeL1Idx !== null) {
       newCats[activeL1Idx].children.splice(idx, 1);
-      setActiveL2Idx(null);
-    } else if (level === 3 && activeL1Idx !== null && activeL2Idx !== null) {
-      newCats[activeL1Idx].children[activeL2Idx].children.splice(idx, 1);
     }
     onUpdate(newCats);
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-secondary-900/50 backdrop-blur-sm p-4">
       <motion.div 
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col max-h-[90vh]"
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl overflow-hidden flex flex-col max-h-[80vh]"
       >
-        <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+        <div className="p-6 border-b border-secondary-100 flex items-center justify-between bg-secondary-50/50">
           <div>
-            <h2 className="text-xl font-bold text-slate-800">类目管理</h2>
-            <p className="text-sm text-slate-500 mt-1">手动添加或修改三级类目结构</p>
+            <h2 className="text-xl font-bold text-secondary-800">类目管理</h2>
+            <p className="text-sm text-secondary-500 mt-1">管理一级类目（分组）及其二级类目（选项）</p>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-slate-200 rounded-full transition-colors">
-            <X className="w-5 h-5 text-slate-500" />
+          <button onClick={onClose} className="p-2 hover:bg-secondary-200 rounded-full transition-colors">
+            <X className="w-5 h-5 text-secondary-500" />
           </button>
         </div>
 
-        <div className="flex-1 flex overflow-hidden min-h-[500px]">
+        <div className="flex-1 flex overflow-hidden min-h-[400px]">
           {/* Level 1 Management */}
-          <div className="w-1/3 border-r border-slate-100 flex flex-col">
-            <div className="p-4 bg-slate-50/50 border-b border-slate-100">
-              <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">一级类目</div>
+          <div className="w-1/2 border-r border-secondary-100 flex flex-col">
+            <div className="p-4 bg-secondary-50/50 border-b border-secondary-100">
+              <div className="text-xs font-bold text-secondary-400 uppercase tracking-wider mb-3">一级类目 (分组)</div>
               <div className="flex gap-2">
                 <input 
                   type="text" 
                   placeholder="添加一级类目"
-                  className="flex-1 px-3 py-1.5 text-sm border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-brand-500/20"
+                  className="flex-1 px-3 py-1.5 text-sm border border-secondary-200 rounded-lg outline-none focus:ring-2 focus:ring-primary-500/20"
                   value={activeL1Idx === null ? newItemName : ''}
                   onChange={(e) => {
                     setActiveL1Idx(null);
@@ -809,7 +791,7 @@ function CategoryManagementModal({
                 />
                 <button 
                   onClick={handleAddL1}
-                  className="p-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700 transition-colors"
+                  className="p-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
                 >
                   <Plus className="w-4 h-4" />
                 </button>
@@ -821,15 +803,14 @@ function CategoryManagementModal({
                   key={idx}
                   onClick={() => {
                     setActiveL1Idx(idx);
-                    setActiveL2Idx(null);
                   }}
                   className={`group flex items-center justify-between p-3 rounded-xl cursor-pointer transition-all ${
-                    activeL1Idx === idx ? 'bg-brand-50 text-brand-600 shadow-sm' : 'hover:bg-slate-50 text-slate-600'
+                    activeL1Idx === idx ? 'bg-primary-50 text-primary-600 shadow-sm' : 'hover:bg-secondary-50 text-secondary-600'
                   }`}
                 >
                   <span className="text-sm font-medium">{cat.name}</span>
                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={(e) => { e.stopPropagation(); handleDelete(1, idx); }} className="p-1 hover:bg-rose-100 text-rose-500 rounded">
+                    <button onClick={(e) => { e.stopPropagation(); handleDelete(1, idx); }} className="p-1 hover:bg-error-100 text-error-500 rounded">
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
@@ -839,25 +820,24 @@ function CategoryManagementModal({
           </div>
 
           {/* Level 2 Management */}
-          <div className="w-1/3 border-r border-slate-100 flex flex-col">
-            <div className="p-4 bg-slate-50/50 border-b border-slate-100">
-              <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">二级类目</div>
+          <div className="w-1/2 flex flex-col">
+            <div className="p-4 bg-secondary-50/50 border-b border-secondary-100">
+              <div className="text-xs font-bold text-secondary-400 uppercase tracking-wider mb-3">二级类目 (选项)</div>
               <div className="flex gap-2">
                 <input 
                   type="text" 
                   placeholder={activeL1Idx !== null ? `在 ${categories[activeL1Idx].name} 下添加` : "先选择一级类目"}
                   disabled={activeL1Idx === null}
-                  className="flex-1 px-3 py-1.5 text-sm border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-brand-500/20 disabled:bg-slate-100"
-                  value={activeL1Idx !== null && activeL2Idx === null ? newItemName : ''}
+                  className="flex-1 px-3 py-1.5 text-sm border border-secondary-200 rounded-lg outline-none focus:ring-2 focus:ring-primary-500/20 disabled:bg-secondary-100"
+                  value={activeL1Idx !== null ? newItemName : ''}
                   onChange={(e) => {
-                    setActiveL2Idx(null);
                     setNewItemName(e.target.value);
                   }}
                 />
                 <button 
                   onClick={handleAddL2}
                   disabled={activeL1Idx === null}
-                  className="p-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700 transition-colors disabled:bg-slate-300"
+                  className="p-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:bg-secondary-300"
                 >
                   <Plus className="w-4 h-4" />
                 </button>
@@ -867,53 +847,11 @@ function CategoryManagementModal({
               {activeL1Idx !== null && categories[activeL1Idx].children?.map((cat, idx) => (
                 <div 
                   key={idx}
-                  onClick={() => setActiveL2Idx(idx)}
-                  className={`group flex items-center justify-between p-3 rounded-xl cursor-pointer transition-all ${
-                    activeL2Idx === idx ? 'bg-brand-50 text-brand-600 shadow-sm' : 'hover:bg-slate-50 text-slate-600'
-                  }`}
+                  className="group flex items-center justify-between p-3 rounded-xl hover:bg-secondary-50 text-secondary-600 transition-all"
                 >
                   <span className="text-sm font-medium">{cat.name}</span>
                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={(e) => { e.stopPropagation(); handleDelete(2, idx); }} className="p-1 hover:bg-rose-100 text-rose-500 rounded">
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Level 3 Management */}
-          <div className="w-1/3 flex flex-col">
-            <div className="p-4 bg-slate-50/50 border-b border-slate-100">
-              <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">三级类目</div>
-              <div className="flex gap-2">
-                <input 
-                  type="text" 
-                  placeholder={activeL2Idx !== null ? `在 ${categories[activeL1Idx!].children![activeL2Idx].name} 下添加` : "先选择二级类目"}
-                  disabled={activeL2Idx === null}
-                  className="flex-1 px-3 py-1.5 text-sm border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-brand-500/20 disabled:bg-slate-100"
-                  value={activeL2Idx !== null ? newItemName : ''}
-                  onChange={(e) => setNewItemName(e.target.value)}
-                />
-                <button 
-                  onClick={handleAddL3}
-                  disabled={activeL2Idx === null}
-                  className="p-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700 transition-colors disabled:bg-slate-300"
-                >
-                  <Plus className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-            <div className="flex-1 overflow-auto p-2 space-y-1">
-              {activeL1Idx !== null && activeL2Idx !== null && categories[activeL1Idx].children![activeL2Idx].children?.map((cat, idx) => (
-                <div 
-                  key={idx}
-                  className="group flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 text-slate-600 transition-all"
-                >
-                  <span className="text-sm font-medium">{cat.name}</span>
-                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={() => handleDelete(3, idx)} className="p-1 hover:bg-rose-100 text-rose-500 rounded">
+                    <button onClick={() => handleDelete(2, idx)} className="p-1 hover:bg-error-100 text-error-500 rounded">
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
@@ -923,10 +861,10 @@ function CategoryManagementModal({
           </div>
         </div>
 
-        <div className="p-6 border-t border-slate-100 bg-slate-50/50 flex justify-end">
+        <div className="p-6 border-t border-secondary-100 bg-secondary-50/50 flex justify-end">
           <button 
             onClick={onClose}
-            className="px-6 py-2 bg-slate-800 text-white rounded-xl font-bold hover:bg-slate-900 transition-all shadow-lg shadow-slate-200"
+            className="px-6 py-2 bg-secondary-800 text-white rounded-xl font-bold hover:bg-secondary-900 transition-all shadow-lg shadow-secondary-200"
           >
             完成管理
           </button>
@@ -1055,25 +993,25 @@ function CustomDatePicker({
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl shadow-2xl p-4 w-[280px]">
+    <div className="bg-white border border-secondary-200 rounded-xl shadow-2xl p-4 w-[280px]">
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-1 cursor-pointer hover:bg-slate-50 px-2 py-1 rounded">
-          <span className="text-sm font-bold text-slate-800">{year}年{String(month + 1).padStart(2, '0')}月</span>
-          <ChevronDown className="w-3 h-3 text-slate-400" />
+        <div className="flex items-center gap-1 cursor-pointer hover:bg-secondary-50 px-2 py-1 rounded">
+          <span className="text-sm font-bold text-secondary-800">{year}年{String(month + 1).padStart(2, '0')}月</span>
+          <ChevronDown className="w-3 h-3 text-secondary-400" />
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={handlePrevMonth} className="p-1 hover:bg-slate-100 rounded transition-colors">
-            <ArrowUpRight className="w-4 h-4 text-slate-400 -rotate-45" />
+          <button onClick={handlePrevMonth} className="p-1 hover:bg-secondary-100 rounded transition-colors">
+            <ArrowUpRight className="w-4 h-4 text-secondary-400 -rotate-45" />
           </button>
-          <button onClick={handleNextMonth} className="p-1 hover:bg-slate-100 rounded transition-colors">
-            <ArrowDownRight className="w-4 h-4 text-slate-400 rotate-45" />
+          <button onClick={handleNextMonth} className="p-1 hover:bg-secondary-100 rounded transition-colors">
+            <ArrowDownRight className="w-4 h-4 text-secondary-400 rotate-45" />
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-7 gap-1 mb-2">
         {['一', '二', '三', '四', '五', '六', '日'].map(d => (
-          <div key={d} className="text-center text-[10px] font-bold text-slate-400 py-1">{d}</div>
+          <div key={d} className="text-center text-[10px] font-bold text-secondary-400 py-1">{d}</div>
         ))}
       </div>
 
@@ -1089,21 +1027,21 @@ function CustomDatePicker({
               onClick={() => handleDateClick(d.year, d.month, d.day)}
               className={`
                 h-8 w-8 flex items-center justify-center text-xs rounded-lg transition-all relative
-                ${d.isCurrentMonth ? 'text-slate-700' : 'text-slate-300'}
-                ${active ? 'bg-brand-600 text-white font-bold shadow-lg shadow-brand-200' : inRange ? 'bg-brand-50 text-brand-600' : 'hover:bg-slate-100'}
-                ${isToday && !active ? 'text-brand-600 font-bold' : ''}
+                ${d.isCurrentMonth ? 'text-secondary-700' : 'text-secondary-300'}
+                ${active ? 'bg-primary-600 text-white font-bold shadow-lg shadow-primary-200' : inRange ? 'bg-primary-50 text-primary-600' : 'hover:bg-secondary-100'}
+                ${isToday && !active ? 'text-primary-600 font-bold' : ''}
               `}
             >
               {d.day}
               {isToday && !active && (
-                <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-brand-600 rounded-full" />
+                <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary-600 rounded-full" />
               )}
             </button>
           );
         })}
       </div>
 
-      <div className="flex items-center justify-between mt-4 pt-3 border-t border-slate-100">
+      <div className="flex items-center justify-between mt-4 pt-3 border-t border-secondary-100">
         <button 
           onClick={() => {
             setStartDate(null);
@@ -1111,7 +1049,7 @@ function CustomDatePicker({
             onChange('');
             onClose();
           }}
-          className="text-xs font-medium text-slate-400 hover:text-slate-600 transition-colors"
+          className="text-xs font-medium text-secondary-400 hover:text-secondary-600 transition-colors"
         >
           清除
         </button>
@@ -1124,7 +1062,7 @@ function CustomDatePicker({
               onChange(formatDate(today.getFullYear(), today.getMonth(), today.getDate()));
               onClose();
             }}
-            className="text-xs font-medium text-brand-600 hover:text-brand-700 transition-colors"
+            className="text-xs font-medium text-primary-600 hover:text-primary-700 transition-colors"
           >
             今天
           </button>
@@ -1133,7 +1071,7 @@ function CustomDatePicker({
               handleConfirm();
               onClose();
             }}
-            className="px-3 py-1 bg-brand-600 text-white text-xs font-bold rounded-lg hover:bg-brand-700 transition-all"
+            className="px-3 py-1 bg-primary-600 text-white text-xs font-bold rounded-lg hover:bg-primary-700 transition-all"
           >
             确定
           </button>
@@ -1146,7 +1084,7 @@ function CustomDatePicker({
 export function CompetitorAnalysis() {
   const [selectedYear, setSelectedYear] = useState('2026年');
   const [selectedMonth, setSelectedMonth] = useState('03月');
-  const [selectedCategory, setSelectedCategory] = useState<string[]>(['全部类目']);
+  const [selectedCategory, setSelectedCategory] = useState<string>('全部');
   const [selectedPlatform, setSelectedPlatform] = useState('平台');
   const [timeRangeType, setTimeRangeType] = useState('自定义');
   const [startDate, setStartDate] = useState('2026-03-14');
@@ -1498,8 +1436,8 @@ export function CompetitorAnalysis() {
     }
 
     // 顶部栏类目筛选
-    if (!selectedCategory.includes('全部类目')) {
-      if (!selectedCategory.includes(item.secondaryCategory)) {
+    if (selectedCategory !== '全部') {
+      if (item.secondaryCategory !== selectedCategory) {
         return false;
       }
     }
@@ -1577,13 +1515,13 @@ export function CompetitorAnalysis() {
   }, [filteredCompetitors, currentPage, pageSize]);
 
   return (
-    <div className="flex flex-col h-full bg-slate-50/50">
+    <div className="flex flex-col h-full bg-secondary-50/50">
       {/* Top Filter Bar */}
-      <div className="p-4 bg-white border-b border-slate-200">
+      <div className="p-4 bg-white border-b border-secondary-200">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="flex items-center border border-slate-200 rounded-lg overflow-hidden h-10">
-              <div className="px-3 py-2 bg-slate-50 border-r border-slate-200 text-xs font-bold text-slate-500">平台</div>
+            <div className="flex items-center border border-secondary-200 rounded-lg overflow-hidden h-10">
+              <div className="px-3 py-2 bg-secondary-50 border-r border-secondary-200 text-xs font-bold text-secondary-500">平台</div>
               <select 
                 value={selectedPlatform}
                 onChange={(e) => setSelectedPlatform(e.target.value)}
@@ -1598,20 +1536,24 @@ export function CompetitorAnalysis() {
 
             {selectedPlatform === '拼多多' ? (
               <div className="flex items-center gap-2">
-                <CategorySelector value={selectedCategory} onChange={setSelectedCategory} categories={categories} />
+                <PddCategoryFilter 
+                  selectedCategory={selectedCategory} 
+                  onSelect={setSelectedCategory} 
+                  categories={categories}
+                />
                 <button 
                   onClick={() => setIsCategoryModalOpen(true)}
                   title="类目管理"
-                  className="p-2.5 border border-slate-200 rounded-lg text-slate-400 hover:text-brand-600 hover:bg-brand-50 hover:border-brand-200 transition-all"
+                  className="p-2.5 border border-secondary-200 rounded-lg text-secondary-400 hover:text-primary-600 hover:bg-primary-50 hover:border-primary-200 transition-all"
                 >
                   <Settings className="w-4 h-4" />
                 </button>
               </div>
             ) : (
-              <div className="flex items-center border border-slate-200 rounded-lg overflow-hidden h-10">
+              <div className="flex items-center border border-secondary-200 rounded-lg overflow-hidden h-10">
                 <select 
-                  value={selectedCategory[0]}
-                  onChange={(e) => setSelectedCategory([e.target.value])}
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
                   className="px-3 py-2 text-sm outline-none bg-white min-w-[160px]"
                 >
                   <option>全部类目</option>
@@ -1626,7 +1568,7 @@ export function CompetitorAnalysis() {
                 <select 
                   value={selectedYear}
                   onChange={(e) => setSelectedYear(e.target.value)}
-                  className="border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none bg-white h-10"
+                  className="border border-secondary-200 rounded-lg px-3 py-2 text-sm outline-none bg-white h-10"
                 >
                   <option>2026年</option>
                   <option>2025年</option>
@@ -1634,7 +1576,7 @@ export function CompetitorAnalysis() {
                 <select 
                   value={selectedMonth}
                   onChange={(e) => setSelectedMonth(e.target.value)}
-                  className="border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none bg-white h-10"
+                  className="border border-secondary-200 rounded-lg px-3 py-2 text-sm outline-none bg-white h-10"
                 >
                   <option>01月</option>
                   <option>02月</option>
@@ -1646,18 +1588,18 @@ export function CompetitorAnalysis() {
             {selectedPlatform !== '拼多多' && (
               <>
                 <div className="flex items-center gap-2">
-                  <button className="p-2 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors">
-                    <ChevronLeft className="w-4 h-4 text-slate-400" />
+                  <button className="p-2 hover:bg-secondary-100 rounded-lg border border-secondary-200 transition-colors">
+                    <ChevronLeft className="w-4 h-4 text-secondary-400" />
                   </button>
-                  <button className="p-2 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors">
-                    <ChevronRight className="w-4 h-4 text-slate-400" />
+                  <button className="p-2 hover:bg-secondary-100 rounded-lg border border-secondary-200 transition-colors">
+                    <ChevronRight className="w-4 h-4 text-secondary-400" />
                   </button>
-                  <button className="p-2 bg-brand-50 hover:bg-brand-100 rounded-lg border border-brand-200 transition-colors">
-                    <Play className="w-4 h-4 text-brand-600 fill-brand-600" />
+                  <button className="p-2 bg-primary-50 hover:bg-primary-100 rounded-lg border border-primary-200 transition-colors">
+                    <Play className="w-4 h-4 text-primary-600 fill-primary-600" />
                   </button>
                 </div>
 
-                <div className="text-xs text-slate-400">
+                <div className="text-xs text-secondary-400">
                   ( 统计时间：2026年3月1日-3月31日 )
                 </div>
               </>
@@ -1666,17 +1608,17 @@ export function CompetitorAnalysis() {
 
           <div className="flex items-center gap-2">
             {selectedPlatform !== '拼多多' && (
-              <button className="p-2 hover:bg-rose-50 rounded-lg border border-slate-200 text-slate-400 hover:text-rose-500 transition-all">
+              <button className="p-2 hover:bg-error-50 rounded-lg border border-secondary-200 text-secondary-400 hover:text-error-500 transition-all">
                 <Trash2 className="w-4 h-4" />
               </button>
             )}
             {selectedPlatform === '拼多多' ? (
-              <button className="flex items-center gap-2 px-5 py-2.5 bg-brand-600 text-white rounded-lg text-sm font-bold hover:bg-brand-700 transition-all shadow-md shadow-brand-100">
+              <button className="flex items-center gap-2 px-5 py-2.5 bg-primary-600 text-white rounded-lg text-sm font-bold hover:bg-primary-700 transition-all shadow-md shadow-primary-100">
                 <Upload className="w-4 h-4" />
                 上传表格
               </button>
             ) : (
-              <button className="flex items-center gap-2 px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-all">
+              <button className="flex items-center gap-2 px-4 py-2 border border-secondary-200 rounded-lg text-sm font-medium text-secondary-600 hover:bg-secondary-50 transition-all">
                 <Download className="w-4 h-4" />
                 导出表格
               </button>
@@ -1693,24 +1635,24 @@ export function CompetitorAnalysis() {
       />
 
       {/* Main Table Area */}
-      <div className="flex-1 overflow-auto custom-scrollbar p-4 bg-slate-50/50">
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-full">
+      <div className="flex-1 overflow-auto custom-scrollbar p-4 bg-secondary-50/50">
+        <div className="bg-white rounded-xl border border-secondary-200 shadow-sm overflow-hidden flex flex-col h-full">
           {selectedPlatform === '拼多多' && (
-            <div className="p-4 border-b border-slate-100 bg-white flex items-center justify-between gap-4">
+            <div className="p-4 border-b border-secondary-100 bg-white flex items-center justify-between gap-4">
               <div className="flex items-center gap-4 flex-1 max-w-2xl">
                 <div className="flex-1 max-w-md relative group">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-secondary-400" />
                   <input
                     type="text"
                     placeholder="搜索标题、店铺、类目、链接、日期或材质..."
-                    className="w-full pl-10 pr-10 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+                    className="w-full pl-10 pr-10 py-2 bg-secondary-50 border border-secondary-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-full transition-all"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-secondary-400 hover:text-secondary-600 hover:bg-secondary-200 rounded-full transition-all"
                       title="清空搜索"
                     >
                       <X className="w-3.5 h-3.5" />
@@ -1719,15 +1661,15 @@ export function CompetitorAnalysis() {
                 </div>
                 <button 
                   onClick={() => setViewMode(viewMode === 'table' ? 'chart' : 'table')}
-                  className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-50 transition-all shadow-sm whitespace-nowrap"
+                  className="flex items-center gap-2 px-4 py-2 bg-white border border-secondary-200 rounded-lg text-xs font-bold text-secondary-600 hover:bg-secondary-50 transition-all shadow-sm whitespace-nowrap"
                 >
-                  <LineChart className="w-3.5 h-3.5 text-brand-600" />
+                  <LineChart className="w-3.5 h-3.5 text-primary-600" />
                   {viewMode === 'table' ? '折线图' : '返回表格'}
                 </button>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-400">共 {filteredCompetitors.length} 条数据</span>
-                <div className="h-4 w-[1px] bg-slate-200 mx-2" />
+                <span className="text-xs text-secondary-400">共 {filteredCompetitors.length} 条数据</span>
+                <div className="h-4 w-[1px] bg-secondary-200 mx-2" />
                 <button 
                   onClick={() => {
                     setSearchQuery('');
@@ -1752,7 +1694,7 @@ export function CompetitorAnalysis() {
                     setPickedDate('2026-03-25');
                     setPickedListingDate('2026-03-25');
                   }}
-                  className="text-xs font-medium text-brand-600 hover:text-brand-700"
+                  className="text-xs font-medium text-primary-600 hover:text-primary-700"
                 >
                   重置筛选
                 </button>
@@ -1761,21 +1703,21 @@ export function CompetitorAnalysis() {
           )}
           
           {viewMode === 'chart' ? (
-            <div className="flex-1 p-8 bg-slate-50 flex flex-col gap-6 overflow-auto">
-              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-6">
+            <div className="flex-1 p-8 bg-secondary-50 flex flex-col gap-6 overflow-auto">
+              <div className="bg-white p-6 rounded-2xl border border-secondary-200 shadow-sm flex flex-col gap-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-xl font-bold text-slate-800 flex items-center gap-2">
-                      <LineChart className="w-5 h-5 text-brand-600" />
+                    <h3 className="text-xl font-bold text-secondary-800 flex items-center gap-2">
+                      <LineChart className="w-5 h-5 text-primary-600" />
                       {selectedPlatform === '拼多多' ? '销售趋势看版' : (
                         selectedChartField === 'dailySales' ? '销量趋势分析' : 
                         selectedChartField === 'usagePrice' ? '价格分布分析 (露出价)' :
                         selectedChartField === 'maxPrice' ? '价格分布分析 (最高价)' : '客单价分析'
                       )}
-                      {selectedPlatform !== '拼多多' && <span className="text-sm font-normal text-slate-400 ml-2">(Top 10 竞品)</span>}
-                      {selectedPlatform === '拼多多' && <span className="text-sm font-normal text-slate-400 ml-2">(样本量: {filteredCompetitors.length})</span>}
+                      {selectedPlatform !== '拼多多' && <span className="text-sm font-normal text-secondary-400 ml-2">(Top 10 竞品)</span>}
+                      {selectedPlatform === '拼多多' && <span className="text-sm font-normal text-secondary-400 ml-2">(样本量: {filteredCompetitors.length})</span>}
                     </h3>
-                    <p className="text-sm text-slate-500 mt-1">
+                    <p className="text-sm text-secondary-500 mt-1">
                       {selectedChartField === 'dailySales' ? '基于当前筛选条件的竞品日销量对比' : 
                        '基于当前筛选条件的竞品价格数据对比'}
                     </p>
@@ -1783,8 +1725,8 @@ export function CompetitorAnalysis() {
                   <div className="flex flex-col gap-3">
                     <div className="flex items-center gap-4">
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-slate-500">纵轴字段:</span>
-                        <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
+                        <span className="text-xs font-bold text-secondary-500">纵轴字段:</span>
+                        <div className="flex bg-secondary-100 p-1 rounded-lg border border-secondary-200">
                           {[
                             { id: 'dailySales', label: '日销量' },
                             { id: 'usagePrice', label: '露出价' },
@@ -1796,8 +1738,8 @@ export function CompetitorAnalysis() {
                               onClick={() => setSelectedChartField(field.id as any)}
                               className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all ${
                                 selectedChartField === field.id 
-                                  ? 'bg-white text-brand-600 shadow-sm' 
-                                  : 'text-slate-500 hover:text-slate-700'
+                                  ? 'bg-white text-primary-600 shadow-sm' 
+                                  : 'text-secondary-500 hover:text-secondary-700'
                               }`}
                             >
                               {field.label}
@@ -1806,8 +1748,8 @@ export function CompetitorAnalysis() {
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-slate-500">横轴字段:</span>
-                        <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
+                        <span className="text-xs font-bold text-secondary-500">横轴字段:</span>
+                        <div className="flex bg-secondary-100 p-1 rounded-lg border border-secondary-200">
                           {[
                             { id: 'productName', label: '商品名称' },
                             { id: 'date', label: '日期' }
@@ -1817,8 +1759,8 @@ export function CompetitorAnalysis() {
                               onClick={() => setSelectedXAxisField(field.id as any)}
                               className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all ${
                                 selectedXAxisField === field.id 
-                                  ? 'bg-white text-brand-600 shadow-sm' 
-                                  : 'text-slate-500 hover:text-slate-700'
+                                  ? 'bg-white text-primary-600 shadow-sm' 
+                                  : 'text-secondary-500 hover:text-secondary-700'
                               }`}
                             >
                               {field.label}
@@ -1830,13 +1772,13 @@ export function CompetitorAnalysis() {
                     <div className="flex items-center justify-end gap-3">
                       <button 
                         onClick={() => setViewMode('table')}
-                        className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-sm font-bold transition-all"
+                        className="flex items-center gap-2 px-4 py-2 bg-secondary-100 hover:bg-secondary-200 text-secondary-600 rounded-lg text-sm font-bold transition-all"
                       >
                         <ChevronLeft className="w-4 h-4" />
                         返回表格
                       </button>
                       <button 
-                        className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-sm font-bold transition-all shadow-md shadow-slate-200"
+                        className="flex items-center gap-2 px-4 py-2 bg-secondary-800 hover:bg-secondary-900 text-white rounded-lg text-sm font-bold transition-all shadow-md shadow-secondary-200"
                       >
                         <Download className="w-4 h-4" />
                         保存为图片
@@ -1845,7 +1787,7 @@ export function CompetitorAnalysis() {
                   </div>
                 </div>
                 
-                <div className="h-[700px] w-full bg-white rounded-xl border border-slate-100 p-6 flex flex-col">
+                <div className="h-[700px] w-full bg-white rounded-xl border border-secondary-100 p-6 flex flex-col">
                   {filteredCompetitors.length > 0 ? (
                     <ResponsiveContainer width="100%" height="100%">
                       <RechartsLineChart
@@ -1940,24 +1882,24 @@ export function CompetitorAnalysis() {
                       </RechartsLineChart>
                     </ResponsiveContainer>
                   ) : (
-                    <div className="flex-1 flex flex-col items-center justify-center text-slate-400 gap-3">
-                      <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center">
-                        <Search className="w-8 h-8 text-slate-300" />
+                    <div className="flex-1 flex flex-col items-center justify-center text-secondary-400 gap-3">
+                      <div className="w-16 h-16 bg-secondary-100 rounded-full flex items-center justify-center">
+                        <Search className="w-8 h-8 text-secondary-300" />
                       </div>
                       <p className="text-sm font-medium">未找到匹配的数据，请调整筛选条件</p>
                     </div>
                   )}
                 </div>
                 
-                <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                <div className="flex items-center justify-between pt-4 border-t border-secondary-100">
                   <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full bg-brand-500" />
-                      <span className="text-xs text-slate-500">数据更新时间: 2026-03-25</span>
+                      <div className="w-3 h-3 rounded-full bg-primary-500" />
+                      <span className="text-xs text-secondary-500">数据更新时间: 2026-03-25</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full bg-emerald-500" />
-                      <span className="text-xs text-slate-500">样本量: {filteredCompetitors.length}</span>
+                      <div className="w-3 h-3 rounded-full bg-success-500" />
+                      <span className="text-xs text-secondary-500">样本量: {filteredCompetitors.length}</span>
                     </div>
                   </div>
                 </div>
@@ -1966,41 +1908,41 @@ export function CompetitorAnalysis() {
           ) : (
             <div className="flex-1 overflow-auto custom-scrollbar">
               <table className="w-full border-collapse text-left">
-              <thead className="sticky top-0 bg-slate-50 z-10 border-b border-slate-200">
+              <thead className="sticky top-0 bg-secondary-50 z-10 border-b border-secondary-200">
                 <tr>
                   {selectedPlatform === '拼多多' ? (
                     <>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider w-24">
+                      <th className="p-4 text-[11px] font-bold text-secondary-500 uppercase tracking-wider w-24">
                         <div className="flex items-center gap-2">
                           <input 
                             type="checkbox" 
-                            className="rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+                            className="rounded border-secondary-300 text-primary-600 focus:ring-primary-500"
                             checked={paginatedCompetitors.length > 0 && paginatedCompetitors.every(item => selectedIds.has(item.id))}
                             onChange={toggleSelectAll}
                           />
                           <span>序号</span>
                         </div>
                       </th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider relative">
+                      <th className="p-4 text-[11px] font-bold text-secondary-500 uppercase tracking-wider relative">
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-1">
                             <span>日期</span>
                             <button 
                               onClick={() => setIsDateFilterOpen(!isDateFilterOpen)}
-                              className={`p-1 rounded hover:bg-slate-200 transition-colors ${isDateFilterOpen || selectedDateFilter !== '全部' ? 'text-brand-600' : 'text-slate-400'}`}
+                              className={`p-1 rounded hover:bg-secondary-200 transition-colors ${isDateFilterOpen || selectedDateFilter !== '全部' ? 'text-primary-600' : 'text-secondary-400'}`}
                             >
                               <Filter className="w-3 h-3" />
                             </button>
                           </div>
                           {selectedDateFilter !== '全部' && (
-                            <div className="text-[9px] text-brand-600 font-bold bg-brand-50 px-1.5 py-0.5 rounded border border-brand-100 flex items-center gap-1 w-fit normal-case">
+                            <div className="text-[9px] text-primary-600 font-bold bg-primary-50 px-1.5 py-0.5 rounded border border-primary-100 flex items-center gap-1 w-fit normal-case">
                               {selectedDateFilter === '指定日期' ? pickedDate : selectedDateFilter}
                               <button 
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   setSelectedDateFilter('全部');
                                 }}
-                                className="hover:bg-brand-100 rounded p-0.5"
+                                className="hover:bg-primary-100 rounded p-0.5"
                               >
                                 <X className="w-2.5 h-2.5" />
                               </button>
@@ -2019,7 +1961,7 @@ export function CompetitorAnalysis() {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 10 }}
-                                className="absolute top-full left-4 mt-1 w-32 bg-white border border-slate-200 rounded-xl shadow-xl z-30 overflow-hidden"
+                                className="absolute top-full left-4 mt-1 w-32 bg-white border border-secondary-200 rounded-xl shadow-xl z-30 overflow-hidden"
                               >
                                 <div className="py-1">
                                   {dateFilterOptions.map((option) => (
@@ -2033,8 +1975,8 @@ export function CompetitorAnalysis() {
                                         }
                                         setIsDateFilterOpen(false);
                                       }}
-                                      className={`w-full text-left px-4 py-2 text-xs hover:bg-slate-50 transition-colors ${
-                                        selectedDateFilter === option ? 'text-brand-600 font-bold bg-brand-50/50' : 'text-slate-600'
+                                      className={`w-full text-left px-4 py-2 text-xs hover:bg-secondary-50 transition-colors ${
+                                        selectedDateFilter === option ? 'text-primary-600 font-bold bg-primary-50/50' : 'text-secondary-600'
                                       }`}
                                     >
                                       {option}
@@ -2073,26 +2015,26 @@ export function CompetitorAnalysis() {
                           )}
                         </AnimatePresence>
                       </th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider relative">
+                      <th className="p-4 text-[11px] font-bold text-secondary-500 uppercase tracking-wider relative">
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-1">
                             <span>类目</span>
                             <button 
                               onClick={() => setIsCategoryFilterOpen(!isCategoryFilterOpen)}
-                              className={`p-1 rounded hover:bg-slate-200 transition-colors ${isCategoryFilterOpen || !selectedCategoryFilter.includes('全部') ? 'text-brand-600' : 'text-slate-400'}`}
+                              className={`p-1 rounded hover:bg-secondary-200 transition-colors ${isCategoryFilterOpen || !selectedCategoryFilter.includes('全部') ? 'text-primary-600' : 'text-secondary-400'}`}
                             >
                               <Filter className="w-3 h-3" />
                             </button>
                           </div>
                           {!selectedCategoryFilter.includes('全部') && (
-                            <div className="text-[9px] text-brand-600 font-bold bg-brand-50 px-1.5 py-0.5 rounded border border-brand-100 flex items-center gap-1 w-fit normal-case">
+                            <div className="text-[9px] text-primary-600 font-bold bg-primary-50 px-1.5 py-0.5 rounded border border-primary-100 flex items-center gap-1 w-fit normal-case">
                               {selectedCategoryFilter.length === 1 ? selectedCategoryFilter[0] : `已选 ${selectedCategoryFilter.length} 个`}
                               <button 
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   setSelectedCategoryFilter(['全部']);
                                 }}
-                                className="hover:bg-brand-100 rounded p-0.5"
+                                className="hover:bg-primary-100 rounded p-0.5"
                               >
                                 <X className="w-2.5 h-2.5" />
                               </button>
@@ -2111,15 +2053,15 @@ export function CompetitorAnalysis() {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 10 }}
-                                className="absolute top-full left-4 mt-1 w-48 bg-white border border-slate-200 rounded-xl shadow-xl z-30 overflow-hidden"
+                                className="absolute top-full left-4 mt-1 w-48 bg-white border border-secondary-200 rounded-xl shadow-xl z-30 overflow-hidden"
                               >
-                                <div className="p-2 border-b border-slate-100">
+                                <div className="p-2 border-b border-secondary-100">
                                   <div className="relative">
-                                    <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400" />
+                                    <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-secondary-400" />
                                     <input 
                                       type="text"
                                       placeholder="搜索类目..."
-                                      className="w-full pl-7 pr-2 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                                      className="w-full pl-7 pr-2 py-1.5 bg-secondary-50 border border-secondary-200 rounded-lg text-[10px] outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                                       value={categorySearchQuery}
                                       onChange={(e) => setCategorySearchQuery(e.target.value)}
                                       autoFocus
@@ -2144,12 +2086,12 @@ export function CompetitorAnalysis() {
                                             }
                                           }
                                         }}
-                                        className={`w-full text-left px-4 py-2 text-[10px] hover:bg-slate-50 transition-colors cursor-pointer flex items-center gap-2 ${
-                                          selectedCategoryFilter.includes(option) ? 'text-brand-600 font-bold bg-brand-50/50' : 'text-slate-600'
+                                        className={`w-full text-left px-4 py-2 text-[10px] hover:bg-secondary-50 transition-colors cursor-pointer flex items-center gap-2 ${
+                                          selectedCategoryFilter.includes(option) ? 'text-primary-600 font-bold bg-primary-50/50' : 'text-secondary-600'
                                         }`}
                                       >
                                         <div className={`w-3 h-3 rounded border flex items-center justify-center transition-colors ${
-                                          selectedCategoryFilter.includes(option) ? 'bg-brand-600 border-brand-600' : 'border-slate-300'
+                                          selectedCategoryFilter.includes(option) ? 'bg-primary-600 border-primary-600' : 'border-secondary-300'
                                         }`}>
                                           {selectedCategoryFilter.includes(option) && <Check className="w-2 h-2 text-white" />}
                                         </div>
@@ -2157,7 +2099,7 @@ export function CompetitorAnalysis() {
                                       </div>
                                     ))
                                   ) : (
-                                    <div className="px-4 py-3 text-[10px] text-slate-400 text-center">未找到类目</div>
+                                    <div className="px-4 py-3 text-[10px] text-surface-muted text-center">未找到类目</div>
                                   )}
                                 </div>
                               </motion.div>
@@ -2165,26 +2107,26 @@ export function CompetitorAnalysis() {
                           )}
                         </AnimatePresence>
                       </th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider relative">
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider relative">
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-1">
                             <span>店铺名称</span>
                             <button 
                               onClick={() => setIsShopFilterOpen(!isShopFilterOpen)}
-                              className={`p-1 rounded hover:bg-slate-200 transition-colors ${isShopFilterOpen || !selectedShopFilter.includes('全部') ? 'text-brand-600' : 'text-slate-400'}`}
+                              className={`p-1 rounded hover:bg-secondary-200 transition-colors ${isShopFilterOpen || !selectedShopFilter.includes('全部') ? 'text-primary-600' : 'text-surface-muted'}`}
                             >
                               <Filter className="w-3 h-3" />
                             </button>
                           </div>
                           {!selectedShopFilter.includes('全部') && (
-                            <div className="text-[9px] text-brand-600 font-bold bg-brand-50 px-1.5 py-0.5 rounded border border-brand-100 flex items-center gap-1 w-fit normal-case">
+                            <div className="text-[9px] text-primary-600 font-bold bg-primary-50 px-1.5 py-0.5 rounded border border-primary-100 flex items-center gap-1 w-fit normal-case">
                               {selectedShopFilter.length === 1 ? selectedShopFilter[0] : `已选 ${selectedShopFilter.length} 个`}
                               <button 
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   setSelectedShopFilter(['全部']);
                                 }}
-                                className="hover:bg-brand-100 rounded p-0.5"
+                                className="hover:bg-primary-100 rounded p-0.5"
                               >
                                 <X className="w-2.5 h-2.5" />
                               </button>
@@ -2203,15 +2145,15 @@ export function CompetitorAnalysis() {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 10 }}
-                                className="absolute top-full left-4 mt-1 w-48 bg-white border border-slate-200 rounded-xl shadow-xl z-30 overflow-hidden"
+                                className="absolute top-full left-4 mt-1 w-48 bg-surface-card border border-surface-border rounded-xl shadow-xl z-30 overflow-hidden"
                               >
-                                <div className="p-2 border-b border-slate-100">
+                                <div className="p-2 border-b border-surface-border">
                                   <div className="relative">
-                                    <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400" />
+                                    <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-surface-muted" />
                                     <input 
                                       type="text"
                                       placeholder="搜索店铺..."
-                                      className="w-full pl-7 pr-2 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                                      className="w-full pl-7 pr-2 py-1.5 bg-surface-bg border border-surface-border rounded-lg text-[10px] outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                                       value={shopSearchQuery}
                                       onChange={(e) => setShopSearchQuery(e.target.value)}
                                       autoFocus
@@ -2236,12 +2178,12 @@ export function CompetitorAnalysis() {
                                             }
                                           }
                                         }}
-                                        className={`w-full text-left px-4 py-2 text-[10px] hover:bg-slate-50 transition-colors cursor-pointer flex items-center gap-2 ${
-                                          selectedShopFilter.includes(option) ? 'text-brand-600 font-bold bg-brand-50/50' : 'text-slate-600'
+                                        className={`w-full text-left px-4 py-2 text-[10px] hover:bg-secondary-50 transition-colors cursor-pointer flex items-center gap-2 ${
+                                          selectedShopFilter.includes(option) ? 'text-primary-600 font-bold bg-primary-50/50' : 'text-secondary-600'
                                         }`}
                                       >
                                         <div className={`w-3 h-3 rounded border flex items-center justify-center transition-colors ${
-                                          selectedShopFilter.includes(option) ? 'bg-brand-600 border-brand-600' : 'border-slate-300'
+                                          selectedShopFilter.includes(option) ? 'bg-primary-600 border-primary-600' : 'border-secondary-300'
                                         }`}>
                                           {selectedShopFilter.includes(option) && <Check className="w-2 h-2 text-white" />}
                                         </div>
@@ -2249,7 +2191,7 @@ export function CompetitorAnalysis() {
                                       </div>
                                     ))
                                   ) : (
-                                    <div className="px-4 py-3 text-[10px] text-slate-400 text-center">未找到店铺</div>
+                                    <div className="px-4 py-3 text-[10px] text-surface-muted text-center">未找到店铺</div>
                                   )}
                                 </div>
                               </motion.div>
@@ -2257,26 +2199,26 @@ export function CompetitorAnalysis() {
                           )}
                         </AnimatePresence>
                       </th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider relative">
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider relative">
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-1">
                             <span>上架时间</span>
                             <button 
                               onClick={() => setIsListingDateFilterOpen(!isListingDateFilterOpen)}
-                              className={`p-1 rounded hover:bg-slate-200 transition-colors ${isListingDateFilterOpen || selectedListingDateFilter !== '全部' ? 'text-brand-600' : 'text-slate-400'}`}
+                              className={`p-1 rounded hover:bg-secondary-200 transition-colors ${isListingDateFilterOpen || selectedListingDateFilter !== '全部' ? 'text-primary-600' : 'text-surface-muted'}`}
                             >
                               <Filter className="w-3 h-3" />
                             </button>
                           </div>
                           {selectedListingDateFilter !== '全部' && (
-                            <div className="text-[9px] text-brand-600 font-bold bg-brand-50 px-1.5 py-0.5 rounded border border-brand-100 flex items-center gap-1 w-fit normal-case">
+                            <div className="text-[9px] text-primary-600 font-bold bg-primary-50 px-1.5 py-0.5 rounded border border-primary-100 flex items-center gap-1 w-fit normal-case">
                               {selectedListingDateFilter === '指定日期' ? pickedListingDate : selectedListingDateFilter}
                               <button 
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   setSelectedListingDateFilter('全部');
                                 }}
-                                className="hover:bg-brand-100 rounded p-0.5"
+                                className="hover:bg-primary-100 rounded p-0.5"
                               >
                                 <X className="w-2.5 h-2.5" />
                               </button>
@@ -2295,7 +2237,7 @@ export function CompetitorAnalysis() {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 10 }}
-                                className="absolute top-full left-4 mt-1 w-32 bg-white border border-slate-200 rounded-xl shadow-xl z-30 overflow-hidden"
+                                className="absolute top-full left-4 mt-1 w-32 bg-surface-card border border-surface-border rounded-xl shadow-xl z-30 overflow-hidden"
                               >
                                 <div className="py-1">
                                   {dateFilterOptions.map((option) => (
@@ -2309,8 +2251,8 @@ export function CompetitorAnalysis() {
                                         }
                                         setIsListingDateFilterOpen(false);
                                       }}
-                                      className={`w-full text-left px-4 py-2 text-xs hover:bg-slate-50 transition-colors ${
-                                        selectedListingDateFilter === option ? 'text-brand-600 font-bold bg-brand-50/50' : 'text-slate-600'
+                                      className={`w-full text-left px-4 py-2 text-xs hover:bg-secondary-50 transition-colors ${
+                                        selectedListingDateFilter === option ? 'text-primary-600 font-bold bg-primary-50/50' : 'text-secondary-600'
                                       }`}
                                     >
                                       {option}
@@ -2349,29 +2291,29 @@ export function CompetitorAnalysis() {
                           )}
                         </AnimatePresence>
                       </th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">标题名称</th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">链接</th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">主图</th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider relative">
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider">标题名称</th>
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider">链接</th>
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider">主图</th>
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider relative">
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-1">
                             <span>材质</span>
                             <button 
                               onClick={() => setIsMaterialFilterOpen(!isMaterialFilterOpen)}
-                              className={`p-1 rounded hover:bg-slate-200 transition-colors ${isMaterialFilterOpen || !selectedMaterialFilter.includes('全部') ? 'text-brand-600' : 'text-slate-400'}`}
+                              className={`p-1 rounded hover:bg-secondary-200 transition-colors ${isMaterialFilterOpen || !selectedMaterialFilter.includes('全部') ? 'text-primary-600' : 'text-surface-muted'}`}
                             >
                               <Filter className="w-3 h-3" />
                             </button>
                           </div>
                           {!selectedMaterialFilter.includes('全部') && (
-                            <div className="text-[9px] text-brand-600 font-bold bg-brand-50 px-1.5 py-0.5 rounded border border-brand-100 flex items-center gap-1 w-fit normal-case">
+                            <div className="text-[9px] text-primary-600 font-bold bg-primary-50 px-1.5 py-0.5 rounded border border-primary-100 flex items-center gap-1 w-fit normal-case">
                               {selectedMaterialFilter.length === 1 ? selectedMaterialFilter[0] : `已选 ${selectedMaterialFilter.length} 个`}
                               <button 
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   setSelectedMaterialFilter(['全部']);
                                 }}
-                                className="hover:bg-brand-100 rounded p-0.5"
+                                className="hover:bg-primary-100 rounded p-0.5"
                               >
                                 <X className="w-2.5 h-2.5" />
                               </button>
@@ -2390,15 +2332,15 @@ export function CompetitorAnalysis() {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 10 }}
-                                className="absolute top-full left-4 mt-1 w-48 bg-white border border-slate-200 rounded-xl shadow-xl z-30 overflow-hidden"
+                                className="absolute top-full left-4 mt-1 w-48 bg-surface-card border border-surface-border rounded-xl shadow-xl z-30 overflow-hidden"
                               >
-                                <div className="p-2 border-b border-slate-100">
+                                <div className="p-2 border-b border-surface-border">
                                   <div className="relative">
-                                    <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400" />
+                                    <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-surface-muted" />
                                     <input 
                                       type="text"
                                       placeholder="搜索材质..."
-                                      className="w-full pl-7 pr-2 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                                      className="w-full pl-7 pr-2 py-1.5 bg-surface-bg border border-surface-border rounded-lg text-[10px] outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                                       value={materialSearchQuery}
                                       onChange={(e) => setMaterialSearchQuery(e.target.value)}
                                       autoFocus
@@ -2423,12 +2365,12 @@ export function CompetitorAnalysis() {
                                             }
                                           }
                                         }}
-                                        className={`w-full text-left px-4 py-2 text-[10px] hover:bg-slate-50 transition-colors cursor-pointer flex items-center gap-2 ${
-                                          selectedMaterialFilter.includes(option) ? 'text-brand-600 font-bold bg-brand-50/50' : 'text-slate-600'
+                                        className={`w-full text-left px-4 py-2 text-[10px] hover:bg-secondary-50 transition-colors cursor-pointer flex items-center gap-2 ${
+                                          selectedMaterialFilter.includes(option) ? 'text-primary-600 font-bold bg-primary-50/50' : 'text-secondary-600'
                                         }`}
                                       >
                                         <div className={`w-3 h-3 rounded border flex items-center justify-center transition-colors ${
-                                          selectedMaterialFilter.includes(option) ? 'bg-brand-600 border-brand-600' : 'border-slate-300'
+                                          selectedMaterialFilter.includes(option) ? 'bg-primary-600 border-primary-600' : 'border-secondary-300'
                                         }`}>
                                           {selectedMaterialFilter.includes(option) && <Check className="w-2 h-2 text-white" />}
                                         </div>
@@ -2436,7 +2378,7 @@ export function CompetitorAnalysis() {
                                       </div>
                                     ))
                                   ) : (
-                                    <div className="px-4 py-3 text-[10px] text-slate-400 text-center">未找到材质</div>
+                                    <div className="px-4 py-3 text-[10px] text-surface-muted text-center">未找到材质</div>
                                   )}
                                 </div>
                               </motion.div>
@@ -2444,19 +2386,19 @@ export function CompetitorAnalysis() {
                           )}
                         </AnimatePresence>
                       </th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider relative">
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider relative">
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-1">
                             <span>露出价</span>
                             <button 
                               onClick={() => setIsPriceFilterOpen(!isPriceFilterOpen)}
-                              className={`p-1 rounded hover:bg-slate-200 transition-colors ${isPriceFilterOpen || minPriceFilter !== '' || maxPriceFilter !== '' ? 'text-brand-600' : 'text-slate-400'}`}
+                              className={`p-1 rounded hover:bg-secondary-200 transition-colors ${isPriceFilterOpen || minPriceFilter !== '' || maxPriceFilter !== '' ? 'text-primary-600' : 'text-surface-muted'}`}
                             >
                               <Filter className="w-3 h-3" />
                             </button>
                           </div>
                           {(minPriceFilter !== '' || maxPriceFilter !== '') && (
-                            <div className="text-[9px] text-brand-600 font-bold bg-brand-50 px-1.5 py-0.5 rounded border border-brand-100 flex items-center gap-1 w-fit normal-case">
+                            <div className="text-[9px] text-primary-600 font-bold bg-primary-50 px-1.5 py-0.5 rounded border border-primary-100 flex items-center gap-1 w-fit normal-case">
                               {minPriceFilter || '0'} - {maxPriceFilter || '∞'}
                               <button 
                                 onClick={(e) => {
@@ -2464,7 +2406,7 @@ export function CompetitorAnalysis() {
                                   setMinPriceFilter('');
                                   setMaxPriceFilter('');
                                 }}
-                                className="hover:bg-brand-100 rounded p-0.5"
+                                className="hover:bg-primary-100 rounded p-0.5"
                               >
                                 <X className="w-2.5 h-2.5" />
                               </button>
@@ -2483,22 +2425,22 @@ export function CompetitorAnalysis() {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 10 }}
-                                className="absolute top-full left-0 mt-1 w-48 bg-white border border-slate-200 rounded-xl shadow-xl z-30 p-3"
+                                className="absolute top-full left-0 mt-1 w-48 bg-surface-card border border-surface-border rounded-xl shadow-xl z-30 p-3"
                               >
-                                <div className="text-[10px] font-bold text-slate-500 mb-2">价格区间 (元)</div>
+                                <div className="text-[10px] font-bold text-surface-muted mb-2">价格区间 (元)</div>
                                 <div className="flex items-center gap-2 mb-3">
                                   <input 
                                     type="number"
                                     placeholder="最低"
-                                    className="w-full px-2 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                                    className="w-full px-2 py-1.5 bg-surface-bg border border-surface-border rounded-lg text-[10px] outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                                     value={minPriceFilter}
                                     onChange={(e) => setMinPriceFilter(e.target.value)}
                                   />
-                                  <span className="text-slate-300">-</span>
+                                  <span className="text-secondary-300">-</span>
                                   <input 
                                     type="number"
                                     placeholder="最高"
-                                    className="w-full px-2 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                                    className="w-full px-2 py-1.5 bg-surface-bg border border-surface-border rounded-lg text-[10px] outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                                     value={maxPriceFilter}
                                     onChange={(e) => setMaxPriceFilter(e.target.value)}
                                   />
@@ -2509,13 +2451,13 @@ export function CompetitorAnalysis() {
                                       setMinPriceFilter('');
                                       setMaxPriceFilter('');
                                     }}
-                                    className="flex-1 py-1.5 text-[10px] font-bold text-slate-500 hover:bg-slate-50 rounded-lg transition-colors"
+                                    className="flex-1 py-1.5 text-[10px] font-bold text-surface-muted hover:bg-secondary-50 rounded-lg transition-colors"
                                   >
                                     重置
                                   </button>
                                   <button 
                                     onClick={() => setIsPriceFilterOpen(false)}
-                                    className="flex-1 py-1.5 text-[10px] font-bold text-white bg-brand-600 hover:bg-brand-700 rounded-lg transition-all shadow-sm"
+                                    className="flex-1 py-1.5 text-[10px] font-bold text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-all shadow-sm"
                                   >
                                     确定
                                   </button>
@@ -2525,19 +2467,19 @@ export function CompetitorAnalysis() {
                           )}
                         </AnimatePresence>
                       </th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider relative">
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider relative">
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-1">
                             <span>最高价</span>
                             <button 
                               onClick={() => setIsMaxPriceFilterOpen(!isMaxPriceFilterOpen)}
-                              className={`p-1 rounded hover:bg-slate-200 transition-colors ${isMaxPriceFilterOpen || minMaxPriceFilter !== '' || maxMaxPriceFilter !== '' ? 'text-brand-600' : 'text-slate-400'}`}
+                              className={`p-1 rounded hover:bg-secondary-200 transition-colors ${isMaxPriceFilterOpen || minMaxPriceFilter !== '' || maxMaxPriceFilter !== '' ? 'text-primary-600' : 'text-surface-muted'}`}
                             >
                               <Filter className="w-3 h-3" />
                             </button>
                           </div>
                           {(minMaxPriceFilter !== '' || maxMaxPriceFilter !== '') && (
-                            <div className="text-[9px] text-brand-600 font-bold bg-brand-50 px-1.5 py-0.5 rounded border border-brand-100 flex items-center gap-1 w-fit normal-case">
+                            <div className="text-[9px] text-primary-600 font-bold bg-primary-50 px-1.5 py-0.5 rounded border border-primary-100 flex items-center gap-1 w-fit normal-case">
                               {minMaxPriceFilter || '0'} - {maxMaxPriceFilter || '∞'}
                               <button 
                                 onClick={(e) => {
@@ -2545,7 +2487,7 @@ export function CompetitorAnalysis() {
                                   setMinMaxPriceFilter('');
                                   setMaxMaxPriceFilter('');
                                 }}
-                                className="hover:bg-brand-100 rounded p-0.5"
+                                className="hover:bg-primary-100 rounded p-0.5"
                               >
                                 <X className="w-2.5 h-2.5" />
                               </button>
@@ -2564,22 +2506,22 @@ export function CompetitorAnalysis() {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 10 }}
-                                className="absolute top-full left-0 mt-1 w-48 bg-white border border-slate-200 rounded-xl shadow-xl z-30 p-3"
+                                className="absolute top-full left-0 mt-1 w-48 bg-surface-card border border-surface-border rounded-xl shadow-xl z-30 p-3"
                               >
-                                <div className="text-[10px] font-bold text-slate-500 mb-2">价格区间 (元)</div>
+                                <div className="text-[10px] font-bold text-surface-muted mb-2">价格区间 (元)</div>
                                 <div className="flex items-center gap-2 mb-3">
                                   <input 
                                     type="number"
                                     placeholder="最低"
-                                    className="w-full px-2 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                                    className="w-full px-2 py-1.5 bg-surface-bg border border-surface-border rounded-lg text-[10px] outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                                     value={minMaxPriceFilter}
                                     onChange={(e) => setMinMaxPriceFilter(e.target.value)}
                                   />
-                                  <span className="text-slate-300">-</span>
+                                  <span className="text-secondary-300">-</span>
                                   <input 
                                     type="number"
                                     placeholder="最高"
-                                    className="w-full px-2 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                                    className="w-full px-2 py-1.5 bg-surface-bg border border-surface-border rounded-lg text-[10px] outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                                     value={maxMaxPriceFilter}
                                     onChange={(e) => setMaxMaxPriceFilter(e.target.value)}
                                   />
@@ -2590,13 +2532,13 @@ export function CompetitorAnalysis() {
                                       setMinMaxPriceFilter('');
                                       setMaxMaxPriceFilter('');
                                     }}
-                                    className="flex-1 py-1.5 text-[10px] font-bold text-slate-500 hover:bg-slate-50 rounded-lg transition-colors"
+                                    className="flex-1 py-1.5 text-[10px] font-bold text-surface-muted hover:bg-secondary-50 rounded-lg transition-colors"
                                   >
                                     重置
                                   </button>
                                   <button 
                                     onClick={() => setIsMaxPriceFilterOpen(false)}
-                                    className="flex-1 py-1.5 text-[10px] font-bold text-white bg-brand-600 hover:bg-brand-700 rounded-lg transition-all shadow-sm"
+                                    className="flex-1 py-1.5 text-[10px] font-bold text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-all shadow-sm"
                                   >
                                     确定
                                   </button>
@@ -2606,19 +2548,19 @@ export function CompetitorAnalysis() {
                           )}
                         </AnimatePresence>
                       </th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap relative">
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider whitespace-nowrap relative">
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-1">
                             <span>预估客单价</span>
                             <button 
                               onClick={() => setIsStarCustomerPriceFilterOpen(!isStarCustomerPriceFilterOpen)}
-                              className={`p-1 rounded hover:bg-slate-200 transition-colors ${isStarCustomerPriceFilterOpen || minStarCustomerPriceFilter !== '' || maxStarCustomerPriceFilter !== '' ? 'text-brand-600' : 'text-slate-400'}`}
+                              className={`p-1 rounded hover:bg-secondary-200 transition-colors ${isStarCustomerPriceFilterOpen || minStarCustomerPriceFilter !== '' || maxStarCustomerPriceFilter !== '' ? 'text-primary-600' : 'text-surface-muted'}`}
                             >
                               <Filter className="w-3 h-3" />
                             </button>
                           </div>
                           {(minStarCustomerPriceFilter !== '' || maxStarCustomerPriceFilter !== '') && (
-                            <div className="text-[9px] text-brand-600 font-bold bg-brand-50 px-1.5 py-0.5 rounded border border-brand-100 flex items-center gap-1 w-fit normal-case">
+                            <div className="text-[9px] text-primary-600 font-bold bg-primary-50 px-1.5 py-0.5 rounded border border-primary-100 flex items-center gap-1 w-fit normal-case">
                               {minStarCustomerPriceFilter || '0'} - {maxStarCustomerPriceFilter || '∞'}
                               <button 
                                 onClick={(e) => {
@@ -2626,7 +2568,7 @@ export function CompetitorAnalysis() {
                                   setMinStarCustomerPriceFilter('');
                                   setMaxStarCustomerPriceFilter('');
                                 }}
-                                className="hover:bg-brand-100 rounded p-0.5"
+                                className="hover:bg-primary-100 rounded p-0.5"
                               >
                                 <X className="w-2.5 h-2.5" />
                               </button>
@@ -2645,22 +2587,22 @@ export function CompetitorAnalysis() {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 10 }}
-                                className="absolute top-full left-0 mt-1 w-48 bg-white border border-slate-200 rounded-xl shadow-xl z-30 p-3"
+                                className="absolute top-full left-0 mt-1 w-48 bg-surface-card border border-surface-border rounded-xl shadow-xl z-30 p-3"
                               >
-                                <div className="text-[10px] font-bold text-slate-500 mb-2">价格区间 (元)</div>
+                                <div className="text-[10px] font-bold text-surface-muted mb-2">价格区间 (元)</div>
                                 <div className="flex items-center gap-2 mb-3">
                                   <input 
                                     type="number"
                                     placeholder="最低"
-                                    className="w-full px-2 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                                    className="w-full px-2 py-1.5 bg-surface-bg border border-surface-border rounded-lg text-[10px] outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                                     value={minStarCustomerPriceFilter}
                                     onChange={(e) => setMinStarCustomerPriceFilter(e.target.value)}
                                   />
-                                  <span className="text-slate-300">-</span>
+                                  <span className="text-secondary-300">-</span>
                                   <input 
                                     type="number"
                                     placeholder="最高"
-                                    className="w-full px-2 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                                    className="w-full px-2 py-1.5 bg-surface-bg border border-surface-border rounded-lg text-[10px] outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                                     value={maxStarCustomerPriceFilter}
                                     onChange={(e) => setMaxStarCustomerPriceFilter(e.target.value)}
                                   />
@@ -2671,13 +2613,13 @@ export function CompetitorAnalysis() {
                                       setMinStarCustomerPriceFilter('');
                                       setMaxStarCustomerPriceFilter('');
                                     }}
-                                    className="flex-1 py-1.5 text-[10px] font-bold text-slate-500 hover:bg-slate-50 rounded-lg transition-colors"
+                                    className="flex-1 py-1.5 text-[10px] font-bold text-surface-muted hover:bg-secondary-50 rounded-lg transition-colors"
                                   >
                                     重置
                                   </button>
                                   <button 
                                     onClick={() => setIsStarCustomerPriceFilterOpen(false)}
-                                    className="flex-1 py-1.5 text-[10px] font-bold text-white bg-brand-600 hover:bg-brand-700 rounded-lg transition-all shadow-sm"
+                                    className="flex-1 py-1.5 text-[10px] font-bold text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-all shadow-sm"
                                   >
                                     确定
                                   </button>
@@ -2687,19 +2629,19 @@ export function CompetitorAnalysis() {
                           )}
                         </AnimatePresence>
                       </th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider relative">
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider relative">
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-1">
                             <span>日销量</span>
                             <button 
                               onClick={() => setIsDailySalesFilterOpen(!isDailySalesFilterOpen)}
-                              className={`p-1 rounded hover:bg-slate-200 transition-colors ${isDailySalesFilterOpen || minDailySalesFilter !== '' || maxDailySalesFilter !== '' ? 'text-brand-600' : 'text-slate-400'}`}
+                              className={`p-1 rounded hover:bg-secondary-200 transition-colors ${isDailySalesFilterOpen || minDailySalesFilter !== '' || maxDailySalesFilter !== '' ? 'text-primary-600' : 'text-surface-muted'}`}
                             >
                               <Filter className="w-3 h-3" />
                             </button>
                           </div>
                           {(minDailySalesFilter !== '' || maxDailySalesFilter !== '') && (
-                            <div className="text-[9px] text-brand-600 font-bold bg-brand-50 px-1.5 py-0.5 rounded border border-brand-100 flex items-center gap-1 w-fit normal-case">
+                            <div className="text-[9px] text-primary-600 font-bold bg-primary-50 px-1.5 py-0.5 rounded border border-primary-100 flex items-center gap-1 w-fit normal-case">
                               {minDailySalesFilter || '0'} - {maxDailySalesFilter || '∞'}
                               <button 
                                 onClick={(e) => {
@@ -2707,7 +2649,7 @@ export function CompetitorAnalysis() {
                                   setMinDailySalesFilter('');
                                   setMaxDailySalesFilter('');
                                 }}
-                                className="hover:bg-brand-100 rounded p-0.5"
+                                className="hover:bg-primary-100 rounded p-0.5"
                               >
                                 <X className="w-2.5 h-2.5" />
                               </button>
@@ -2726,22 +2668,22 @@ export function CompetitorAnalysis() {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 10 }}
-                                className="absolute top-full right-0 mt-1 w-48 bg-white border border-slate-200 rounded-xl shadow-xl z-30 p-3"
+                                className="absolute top-full right-0 mt-1 w-48 bg-surface-card border border-surface-border rounded-xl shadow-xl z-30 p-3"
                               >
-                                <div className="text-[10px] font-bold text-slate-500 mb-2">销量区间</div>
+                                <div className="text-[10px] font-bold text-surface-muted mb-2">销量区间</div>
                                 <div className="flex items-center gap-2 mb-3">
                                   <input 
                                     type="number"
                                     placeholder="最低"
-                                    className="w-full px-2 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                                    className="w-full px-2 py-1.5 bg-surface-bg border border-surface-border rounded-lg text-[10px] outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                                     value={minDailySalesFilter}
                                     onChange={(e) => setMinDailySalesFilter(e.target.value)}
                                   />
-                                  <span className="text-slate-300">-</span>
+                                  <span className="text-secondary-300">-</span>
                                   <input 
                                     type="number"
                                     placeholder="最高"
-                                    className="w-full px-2 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                                    className="w-full px-2 py-1.5 bg-surface-bg border border-surface-border rounded-lg text-[10px] outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                                     value={maxDailySalesFilter}
                                     onChange={(e) => setMaxDailySalesFilter(e.target.value)}
                                   />
@@ -2752,13 +2694,13 @@ export function CompetitorAnalysis() {
                                       setMinDailySalesFilter('');
                                       setMaxDailySalesFilter('');
                                     }}
-                                    className="flex-1 py-1.5 text-[10px] font-bold text-slate-500 hover:bg-slate-50 rounded-lg transition-colors"
+                                    className="flex-1 py-1.5 text-[10px] font-bold text-surface-muted hover:bg-secondary-50 rounded-lg transition-colors"
                                   >
                                     重置
                                   </button>
                                   <button 
                                     onClick={() => setIsDailySalesFilterOpen(false)}
-                                    className="flex-1 py-1.5 text-[10px] font-bold text-white bg-brand-600 hover:bg-brand-700 rounded-lg transition-all shadow-sm"
+                                    className="flex-1 py-1.5 text-[10px] font-bold text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-all shadow-sm"
                                   >
                                     确定
                                   </button>
@@ -2768,26 +2710,26 @@ export function CompetitorAnalysis() {
                           )}
                         </AnimatePresence>
                       </th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider relative">
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider relative">
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-1">
                             <span>百亿</span>
                             <button 
                               onClick={() => setIsBillionSubsidyFilterOpen(!isBillionSubsidyFilterOpen)}
-                              className={`p-1 rounded hover:bg-slate-200 transition-colors ${isBillionSubsidyFilterOpen || billionSubsidyFilter !== 'all' ? 'text-brand-600' : 'text-slate-400'}`}
+                              className={`p-1 rounded hover:bg-secondary-200 transition-colors ${isBillionSubsidyFilterOpen || billionSubsidyFilter !== 'all' ? 'text-primary-600' : 'text-surface-muted'}`}
                             >
                               <Filter className="w-3 h-3" />
                             </button>
                           </div>
                           {billionSubsidyFilter !== 'all' && (
-                            <div className="text-[9px] text-brand-600 font-bold bg-brand-50 px-1.5 py-0.5 rounded border border-brand-100 flex items-center gap-1 w-fit normal-case">
+                            <div className="text-[9px] text-primary-600 font-bold bg-primary-50 px-1.5 py-0.5 rounded border border-primary-100 flex items-center gap-1 w-fit normal-case">
                               {billionSubsidyFilter === 'yes' ? '是' : '否'}
                               <button 
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   setBillionSubsidyFilter('all');
                                 }}
-                                className="hover:bg-brand-100 rounded p-0.5"
+                                className="hover:bg-primary-100 rounded p-0.5"
                               >
                                 <X className="w-2.5 h-2.5" />
                               </button>
@@ -2806,10 +2748,10 @@ export function CompetitorAnalysis() {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 10 }}
-                                className="absolute top-full left-0 mt-1 w-32 bg-white border border-slate-200 rounded-xl shadow-xl z-30 overflow-hidden"
+                                className="absolute top-full left-0 mt-1 w-32 bg-surface-card border border-surface-border rounded-xl shadow-xl z-30 overflow-hidden"
                               >
-                                <div className="p-2 border-b border-slate-100 bg-slate-50/50">
-                                  <div className="text-[10px] font-bold text-slate-500">百亿筛选</div>
+                                <div className="p-2 border-b border-surface-border bg-surface-bg/50">
+                                  <div className="text-[10px] font-bold text-surface-muted">百亿筛选</div>
                                 </div>
                                 <div className="p-1">
                                   <button
@@ -2817,7 +2759,7 @@ export function CompetitorAnalysis() {
                                       setBillionSubsidyFilter('all');
                                       setIsBillionSubsidyFilterOpen(false);
                                     }}
-                                    className={`w-full text-left px-3 py-2 text-[10px] font-medium rounded-lg transition-colors ${billionSubsidyFilter === 'all' ? 'bg-brand-50 text-brand-600' : 'text-slate-600 hover:bg-slate-50'}`}
+                                    className={`w-full text-left px-3 py-2 text-[10px] font-medium rounded-lg transition-colors ${billionSubsidyFilter === 'all' ? 'bg-primary-50 text-primary-600' : 'text-secondary-600 hover:bg-secondary-50'}`}
                                   >
                                     全部
                                   </button>
@@ -2826,7 +2768,7 @@ export function CompetitorAnalysis() {
                                       setBillionSubsidyFilter('yes');
                                       setIsBillionSubsidyFilterOpen(false);
                                     }}
-                                    className={`w-full text-left px-3 py-2 text-[10px] font-medium rounded-lg transition-colors ${billionSubsidyFilter === 'yes' ? 'bg-brand-50 text-brand-600' : 'text-slate-600 hover:bg-slate-50'}`}
+                                    className={`w-full text-left px-3 py-2 text-[10px] font-medium rounded-lg transition-colors ${billionSubsidyFilter === 'yes' ? 'bg-primary-50 text-primary-600' : 'text-secondary-600 hover:bg-secondary-50'}`}
                                   >
                                     是
                                   </button>
@@ -2835,7 +2777,7 @@ export function CompetitorAnalysis() {
                                       setBillionSubsidyFilter('no');
                                       setIsBillionSubsidyFilterOpen(false);
                                     }}
-                                    className={`w-full text-left px-3 py-2 text-[10px] font-medium rounded-lg transition-colors ${billionSubsidyFilter === 'no' ? 'bg-brand-50 text-brand-600' : 'text-slate-600 hover:bg-slate-50'}`}
+                                    className={`w-full text-left px-3 py-2 text-[10px] font-medium rounded-lg transition-colors ${billionSubsidyFilter === 'no' ? 'bg-primary-50 text-primary-600' : 'text-secondary-600 hover:bg-secondary-50'}`}
                                   >
                                     否
                                   </button>
@@ -2845,26 +2787,26 @@ export function CompetitorAnalysis() {
                           )}
                         </AnimatePresence>
                       </th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider relative">
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider relative">
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-1">
                             <span>黑标</span>
                             <button 
                               onClick={() => setIsBlackLabelFilterOpen(!isBlackLabelFilterOpen)}
-                              className={`p-1 rounded hover:bg-slate-200 transition-colors ${isBlackLabelFilterOpen || blackLabelFilter !== 'all' ? 'text-brand-600' : 'text-slate-400'}`}
+                              className={`p-1 rounded hover:bg-secondary-200 transition-colors ${isBlackLabelFilterOpen || blackLabelFilter !== 'all' ? 'text-primary-600' : 'text-surface-muted'}`}
                             >
                               <Filter className="w-3 h-3" />
                             </button>
                           </div>
                           {blackLabelFilter !== 'all' && (
-                            <div className="text-[9px] text-brand-600 font-bold bg-brand-50 px-1.5 py-0.5 rounded border border-brand-100 flex items-center gap-1 w-fit normal-case">
+                            <div className="text-[9px] text-primary-600 font-bold bg-primary-50 px-1.5 py-0.5 rounded border border-primary-100 flex items-center gap-1 w-fit normal-case">
                               {blackLabelFilter === 'yes' ? '是' : '否'}
                               <button 
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   setBlackLabelFilter('all');
                                 }}
-                                className="hover:bg-brand-100 rounded p-0.5"
+                                className="hover:bg-primary-100 rounded p-0.5"
                               >
                                 <X className="w-2.5 h-2.5" />
                               </button>
@@ -2883,10 +2825,10 @@ export function CompetitorAnalysis() {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 10 }}
-                                className="absolute top-full right-0 mt-1 w-32 bg-white border border-slate-200 rounded-xl shadow-xl z-30 overflow-hidden"
+                                className="absolute top-full right-0 mt-1 w-32 bg-surface-card border border-surface-border rounded-xl shadow-xl z-30 overflow-hidden"
                               >
-                                <div className="p-2 border-b border-slate-100 bg-slate-50/50">
-                                  <div className="text-[10px] font-bold text-slate-500">黑标筛选</div>
+                                <div className="p-2 border-b border-surface-border bg-surface-bg/50">
+                                  <div className="text-[10px] font-bold text-surface-muted">黑标筛选</div>
                                 </div>
                                 <div className="p-1">
                                   <button
@@ -2894,7 +2836,7 @@ export function CompetitorAnalysis() {
                                       setBlackLabelFilter('all');
                                       setIsBlackLabelFilterOpen(false);
                                     }}
-                                    className={`w-full text-left px-3 py-2 text-[10px] font-medium rounded-lg transition-colors ${blackLabelFilter === 'all' ? 'bg-brand-50 text-brand-600' : 'text-slate-600 hover:bg-slate-50'}`}
+                                    className={`w-full text-left px-3 py-2 text-[10px] font-medium rounded-lg transition-colors ${blackLabelFilter === 'all' ? 'bg-primary-50 text-primary-600' : 'text-secondary-600 hover:bg-secondary-50'}`}
                                   >
                                     全部
                                   </button>
@@ -2903,7 +2845,7 @@ export function CompetitorAnalysis() {
                                       setBlackLabelFilter('yes');
                                       setIsBlackLabelFilterOpen(false);
                                     }}
-                                    className={`w-full text-left px-3 py-2 text-[10px] font-medium rounded-lg transition-colors ${blackLabelFilter === 'yes' ? 'bg-brand-50 text-brand-600' : 'text-slate-600 hover:bg-slate-50'}`}
+                                    className={`w-full text-left px-3 py-2 text-[10px] font-medium rounded-lg transition-colors ${blackLabelFilter === 'yes' ? 'bg-primary-50 text-primary-600' : 'text-secondary-600 hover:bg-secondary-50'}`}
                                   >
                                     是
                                   </button>
@@ -2912,7 +2854,7 @@ export function CompetitorAnalysis() {
                                       setBlackLabelFilter('no');
                                       setIsBlackLabelFilterOpen(false);
                                     }}
-                                    className={`w-full text-left px-3 py-2 text-[10px] font-medium rounded-lg transition-colors ${blackLabelFilter === 'no' ? 'bg-brand-50 text-brand-600' : 'text-slate-600 hover:bg-slate-50'}`}
+                                    className={`w-full text-left px-3 py-2 text-[10px] font-medium rounded-lg transition-colors ${blackLabelFilter === 'no' ? 'bg-primary-50 text-primary-600' : 'text-secondary-600 hover:bg-secondary-50'}`}
                                   >
                                     否
                                   </button>
@@ -2928,63 +2870,63 @@ export function CompetitorAnalysis() {
                       <th className="p-4 w-10">
                         <input 
                           type="checkbox" 
-                          className="rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+                          className="rounded border-secondary-300 text-primary-600 focus:ring-primary-500"
                           checked={paginatedCompetitors.length > 0 && paginatedCompetitors.every(item => selectedIds.has(item.id))}
                           onChange={toggleSelectAll}
                         />
                       </th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">商品</th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">店铺</th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">排名</th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">销售额</th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">销售额同比</th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">销售额环比</th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">件单价</th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">市场占有率</th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">访客数(区间)</th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">支付人数(区间)</th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">店铺类型</th>
-                      <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">发货地</th>
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider">商品</th>
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider">店铺</th>
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider">排名</th>
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider">销售额</th>
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider">销售额同比</th>
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider">销售额环比</th>
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider">件单价</th>
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider">市场占有率</th>
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider">访客数(区间)</th>
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider whitespace-nowrap">支付人数(区间)</th>
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider">店铺类型</th>
+                      <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider">发货地</th>
                     </>
                   )}
                   {selectedPlatform !== '拼多多' && (
-                    <th className="p-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">操作</th>
+                    <th className="p-4 text-[11px] font-bold text-surface-muted uppercase tracking-wider">操作</th>
                   )}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-surface-border">
                 {paginatedCompetitors.map((item, index) => (
-                  <tr key={item.id} className={`hover:bg-slate-50/50 transition-colors group ${selectedIds.has(item.id) ? 'bg-brand-50/30' : ''}`}>
+                  <tr key={item.id} className={`hover:bg-secondary-50/50 transition-colors group ${selectedIds.has(item.id) ? 'bg-primary-50/30' : ''}`}>
                     {selectedPlatform === '拼多多' ? (
                       <>
                         <td className="p-4">
                           <div className="flex items-center gap-3">
                             <input 
                               type="checkbox" 
-                              className="rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+                              className="rounded border-secondary-300 text-primary-600 focus:ring-primary-500"
                               checked={selectedIds.has(item.id)}
                               onChange={() => toggleSelect(item.id)}
                             />
-                            <span className="text-xs text-slate-500 font-medium">{(currentPage - 1) * pageSize + index + 1}</span>
+                            <span className="text-xs text-surface-muted font-medium">{(currentPage - 1) * pageSize + index + 1}</span>
                           </div>
                         </td>
-                        <td className="p-4 text-xs text-slate-600 whitespace-nowrap">{item.date}</td>
-                        <td className="p-4 text-xs text-slate-600 whitespace-nowrap">{item.secondaryCategory}</td>
+                        <td className="p-4 text-xs text-secondary-600 whitespace-nowrap">{item.date}</td>
+                        <td className="p-4 text-xs text-secondary-600 whitespace-nowrap">{item.secondaryCategory}</td>
                         <td className="p-4">
                           <div className="flex items-center gap-2 min-w-[100px]">
-                            <span className="text-xs text-slate-600">{item.shopName}</span>
+                            <span className="text-xs text-secondary-600">{item.shopName}</span>
                           </div>
                         </td>
-                        <td className="p-4 text-xs text-slate-600 whitespace-nowrap">{item.listingTime}</td>
+                        <td className="p-4 text-xs text-secondary-600 whitespace-nowrap">{item.listingTime}</td>
                         <td className="p-4">
                           <div className="relative group flex items-center gap-1">
-                            <span className="text-xs font-medium text-slate-700 line-clamp-1 leading-relaxed max-w-[150px] block">{item.productName}</span>
+                            <span className="text-xs font-medium text-secondary-700 line-clamp-1 leading-relaxed max-w-[150px] block">{item.productName}</span>
                             <button 
                               onClick={() => handleCopy(item.id + '-name', item.productName)}
                               className={`p-1 rounded transition-all ${
                                 copiedId === item.id + '-name' 
-                                  ? 'text-emerald-500 bg-emerald-50' 
-                                  : 'text-slate-400 hover:text-brand-600 hover:bg-slate-100 opacity-0 group-hover:opacity-100'
+                                  ? 'text-success-500 bg-success-50' 
+                                  : 'text-surface-muted hover:text-primary-600 hover:bg-secondary-100 opacity-0 group-hover:opacity-100'
                               }`}
                               title="复制标题"
                             >
@@ -2994,15 +2936,15 @@ export function CompetitorAnalysis() {
                         </td>
                         <td className="p-4">
                           <div className="relative group flex items-center gap-1">
-                            <a href={item.link} target="_blank" rel="noreferrer" className="text-xs text-brand-600 hover:underline truncate max-w-[80px] block">
+                            <a href={item.link} target="_blank" rel="noreferrer" className="text-xs text-primary-600 hover:underline truncate max-w-[80px] block">
                               {item.link}
                             </a>
                             <button 
                               onClick={() => handleCopy(item.id, item.link)}
                               className={`p-1 rounded transition-all ${
                                 copiedId === item.id 
-                                  ? 'text-emerald-500 bg-emerald-50' 
-                                  : 'text-slate-400 hover:text-brand-600 hover:bg-slate-100 opacity-0 group-hover:opacity-100'
+                                  ? 'text-success-500 bg-success-50' 
+                                  : 'text-surface-muted hover:text-primary-600 hover:bg-secondary-100 opacity-0 group-hover:opacity-100'
                               }`}
                               title="复制链接"
                             >
@@ -3011,20 +2953,20 @@ export function CompetitorAnalysis() {
                           </div>
                         </td>
                         <td className="p-4">
-                          <img src={item.productImage} alt="" className="w-10 h-10 rounded-lg object-cover border border-slate-100" referrerPolicy="no-referrer" />
+                          <img src={item.productImage} alt="" className="w-10 h-10 rounded-lg object-cover border border-surface-border" referrerPolicy="no-referrer" />
                         </td>
-                        <td className="p-4 text-xs text-slate-600">{item.material}</td>
-                        <td className="p-4 text-xs font-bold text-slate-800">¥{item.usagePrice?.toFixed(2)}</td>
-                        <td className="p-4 text-xs text-slate-600">¥{item.maxPrice?.toFixed(2)}</td>
-                        <td className="p-4 text-xs text-slate-600">¥{item.starCustomerPrice?.toFixed(2)}</td>
-                        <td className="p-4 text-xs font-bold text-slate-800">{item.dailySales}</td>
+                        <td className="p-4 text-xs text-secondary-600">{item.material}</td>
+                        <td className="p-4 text-xs font-bold text-secondary-800">¥{item.usagePrice?.toFixed(2)}</td>
+                        <td className="p-4 text-xs text-secondary-600">¥{item.maxPrice?.toFixed(2)}</td>
+                        <td className="p-4 text-xs text-secondary-600">¥{item.starCustomerPrice?.toFixed(2)}</td>
+                        <td className="p-4 text-xs font-bold text-secondary-800">{item.dailySales}</td>
                         <td className="p-4">
-                          <span className={`px-2 py-1 text-[10px] font-bold rounded ${item.isBillionSubsidy ? 'bg-rose-100 text-rose-600' : 'bg-slate-100 text-slate-400'}`}>
+                          <span className={`px-2 py-1 text-[10px] font-bold rounded ${item.isBillionSubsidy ? 'bg-error-100 text-error-600' : 'bg-secondary-100 text-surface-muted'}`}>
                             {item.isBillionSubsidy ? '是' : '否'}
                           </span>
                         </td>
                         <td className="p-4">
-                          <span className={`px-2 py-1 text-[10px] font-bold rounded ${item.isBlackLabel ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-400'}`}>
+                          <span className={`px-2 py-1 text-[10px] font-bold rounded ${item.isBlackLabel ? 'bg-secondary-800 text-white' : 'bg-secondary-100 text-surface-muted'}`}>
                             {item.isBlackLabel ? '是' : '否'}
                           </span>
                         </td>
@@ -3034,76 +2976,76 @@ export function CompetitorAnalysis() {
                         <td className="p-4">
                           <input 
                             type="checkbox" 
-                            className="rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+                            className="rounded border-secondary-300 text-primary-600 focus:ring-primary-500"
                             checked={selectedIds.has(item.id)}
                             onChange={() => toggleSelect(item.id)}
                           />
                         </td>
                         <td className="p-4">
                           <div className="flex items-center gap-3 min-w-[240px]">
-                            <img src={item.productImage} alt="" className="w-10 h-10 rounded-lg object-cover border border-slate-100" referrerPolicy="no-referrer" />
-                            <span className="text-xs font-medium text-slate-700 line-clamp-2 leading-relaxed">{item.productName}</span>
+                            <img src={item.productImage} alt="" className="w-10 h-10 rounded-lg object-cover border border-surface-border" referrerPolicy="no-referrer" />
+                            <span className="text-xs font-medium text-secondary-700 line-clamp-2 leading-relaxed">{item.productName}</span>
                           </div>
                         </td>
                         <td className="p-4">
                           <div className="flex items-center gap-2 min-w-[120px]">
-                            <img src={item.shopIcon} alt="" className="w-5 h-5 rounded-full border border-slate-100" referrerPolicy="no-referrer" />
-                            <span className="text-xs text-slate-600">{item.shopName}</span>
+                            <img src={item.shopIcon} alt="" className="w-5 h-5 rounded-full border border-surface-border" referrerPolicy="no-referrer" />
+                            <span className="text-xs text-secondary-600">{item.shopName}</span>
                           </div>
                         </td>
                         <td className="p-4">
-                          <span className="text-xs font-bold text-slate-800">{item.rank}</span>
+                          <span className="text-xs font-bold text-secondary-800">{item.rank}</span>
                         </td>
                         <td className="p-4">
                           <div className="flex flex-col gap-1">
-                            <span className="text-xs font-bold text-slate-800">{item.sales}万</span>
-                            <div className="w-16 h-1 bg-slate-100 rounded-full overflow-hidden">
-                              <div className="h-full bg-brand-500" style={{ width: `${(item.sales / 300) * 100}%` }}></div>
+                            <span className="text-xs font-bold text-secondary-800">{item.sales}万</span>
+                            <div className="w-16 h-1 bg-secondary-100 rounded-full overflow-hidden">
+                              <div className="h-full bg-primary-500" style={{ width: `${(item.sales / 300) * 100}%` }}></div>
                             </div>
                           </div>
                         </td>
                         <td className="p-4">
-                          <div className={`flex items-center gap-1 text-xs font-bold ${item.salesYoY >= 0 ? 'text-rose-500' : 'text-emerald-500'}`}>
+                          <div className={`flex items-center gap-1 text-xs font-bold ${item.salesYoY >= 0 ? 'text-error-500' : 'text-success-500'}`}>
                             {item.salesYoY >= 0 ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
                             {Math.abs(item.salesYoY)}%
                           </div>
                         </td>
                         <td className="p-4">
-                          <div className={`flex items-center gap-1 text-xs font-bold ${item.salesMoM >= 0 ? 'text-rose-500' : 'text-emerald-500'}`}>
+                          <div className={`flex items-center gap-1 text-xs font-bold ${item.salesMoM >= 0 ? 'text-error-500' : 'text-success-500'}`}>
                             {item.salesMoM >= 0 ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
                             {Math.abs(item.salesMoM)}%
                           </div>
                         </td>
-                        <td className="p-4 text-xs font-medium text-slate-600">
+                        <td className="p-4 text-xs font-medium text-secondary-600">
                           {item.unitPrice.toFixed(2)}
                         </td>
                         <td className="p-4">
                           <div className="flex items-center gap-2">
-                            <span className="text-xs font-bold text-slate-800">{item.marketShare}%</span>
-                            <div className="w-12 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                              <div className="h-full bg-brand-400" style={{ width: `${item.marketShare * 10}%` }}></div>
+                            <span className="text-xs font-bold text-secondary-800">{item.marketShare}%</span>
+                            <div className="w-12 h-1.5 bg-secondary-100 rounded-full overflow-hidden">
+                              <div className="h-full bg-primary-400" style={{ width: `${item.marketShare * 10}%` }}></div>
                             </div>
                           </div>
                         </td>
-                        <td className="p-4 text-xs text-slate-600 whitespace-nowrap">
+                        <td className="p-4 text-xs text-secondary-600 whitespace-nowrap">
                           {item.visitorsRange}
                         </td>
-                        <td className="p-4 text-xs text-slate-600 whitespace-nowrap">
+                        <td className="p-4 text-xs text-secondary-600 whitespace-nowrap">
                           {item.paidUsersRange}
                         </td>
                         <td className="p-4">
-                          <span className="px-2 py-1 bg-slate-100 text-slate-600 text-[10px] font-bold rounded uppercase tracking-wider">
+                          <span className="px-2 py-1 bg-secondary-100 text-secondary-600 text-[10px] font-bold rounded uppercase tracking-wider">
                             {item.shopType}
                           </span>
                         </td>
-                        <td className="p-4 text-xs text-slate-600">
+                        <td className="p-4 text-xs text-secondary-600">
                           {item.shippingLocation}
                         </td>
                       </>
                     )}
                     {selectedPlatform !== '拼多多' && (
                       <td className="p-4">
-                        <button className="text-xs font-bold text-brand-600 hover:text-brand-700 hover:underline transition-all">
+                        <button className="text-xs font-bold text-primary-600 hover:text-primary-700 hover:underline transition-all">
                           测算
                         </button>
                       </td>
@@ -3117,19 +3059,19 @@ export function CompetitorAnalysis() {
 
           {/* Pagination */}
           {filteredCompetitors.length > 0 && (
-            <div className="px-6 py-4 border-t border-slate-100 bg-white flex items-center justify-between">
-              <div className="text-xs text-slate-500">
-                共 <span className="font-bold text-slate-700">{filteredCompetitors.length}</span> 条数据，
-                展示第 <span className="font-bold text-slate-700">{(currentPage - 1) * pageSize + 1}</span> 到 <span className="font-bold text-slate-700">{Math.min(currentPage * pageSize, filteredCompetitors.length)}</span> 条
+            <div className="px-6 py-4 border-t border-surface-border bg-surface-card flex items-center justify-between">
+              <div className="text-xs text-surface-muted">
+                共 <span className="font-bold text-secondary-700">{filteredCompetitors.length}</span> 条数据，
+                展示第 <span className="font-bold text-secondary-700">{(currentPage - 1) * pageSize + 1}</span> 到 <span className="font-bold text-secondary-700">{Math.min(currentPage * pageSize, filteredCompetitors.length)}</span> 条
                 {selectedIds.size > 0 && (
-                  <>，已选中 <span className="font-bold text-brand-600">{selectedIds.size}</span> 条</>
+                  <>，已选中 <span className="font-bold text-primary-600">{selectedIds.size}</span> 条</>
                 )}
               </div>
               <div className="flex items-center gap-2">
                 <button 
                   onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                   disabled={currentPage === 1}
-                  className="p-2 border border-slate-200 rounded-lg text-slate-400 hover:text-brand-600 hover:bg-brand-50 disabled:opacity-50 disabled:hover:bg-transparent transition-all"
+                  className="p-2 border border-surface-border rounded-lg text-surface-muted hover:text-primary-600 hover:bg-primary-50 disabled:opacity-50 disabled:hover:bg-transparent transition-all"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
@@ -3153,8 +3095,8 @@ export function CompetitorAnalysis() {
                         onClick={() => setCurrentPage(pageNum)}
                         className={`w-8 h-8 flex items-center justify-center rounded-lg text-xs font-bold transition-all ${
                           currentPage === pageNum 
-                            ? 'bg-brand-600 text-white shadow-md shadow-brand-200' 
-                            : 'text-slate-500 hover:bg-slate-100'
+                            ? 'bg-primary-600 text-white shadow-md shadow-primary-200' 
+                            : 'text-surface-muted hover:bg-secondary-100'
                         }`}
                       >
                         {pageNum}
@@ -3166,7 +3108,7 @@ export function CompetitorAnalysis() {
                 <button 
                   onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                   disabled={currentPage === totalPages}
-                  className="p-2 border border-slate-200 rounded-lg text-slate-400 hover:text-brand-600 hover:bg-brand-50 disabled:opacity-50 disabled:hover:bg-transparent transition-all"
+                  className="p-2 border border-surface-border rounded-lg text-surface-muted hover:text-primary-600 hover:bg-primary-50 disabled:opacity-50 disabled:hover:bg-transparent transition-all"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
@@ -3175,13 +3117,13 @@ export function CompetitorAnalysis() {
           )}
 
           {selectedPlatform === '拼多多' && (
-            <div className="p-4 border-t border-slate-100 bg-slate-50/30 flex justify-end gap-3">
+            <div className="p-4 border-t border-surface-border bg-surface-bg/30 flex justify-end gap-3">
               <button 
                 onClick={selectAllFilteredData}
                 className={`flex items-center gap-2 px-6 py-2 border rounded-lg text-sm font-bold transition-all shadow-sm ${
                   selectedIds.size === filteredCompetitors.length && filteredCompetitors.length > 0
-                    ? 'bg-brand-50 border-brand-200 text-brand-600'
-                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                    ? 'bg-primary-50 border-primary-200 text-primary-600'
+                    : 'bg-surface-card border-surface-border text-secondary-600 hover:bg-secondary-50'
                 }`}
               >
                 <CheckSquare className="w-4 h-4" />
@@ -3189,7 +3131,7 @@ export function CompetitorAnalysis() {
               </button>
               <button 
                 onClick={handleExport}
-                className="flex items-center gap-2 px-6 py-2 bg-white border border-slate-200 rounded-lg text-sm font-bold text-slate-600 hover:bg-slate-50 transition-all shadow-sm"
+                className="flex items-center gap-2 px-6 py-2 bg-surface-card border border-surface-border rounded-lg text-sm font-bold text-secondary-600 hover:bg-secondary-50 transition-all shadow-sm"
               >
                 <Download className="w-4 h-4" />
                 导出表格
@@ -3200,26 +3142,26 @@ export function CompetitorAnalysis() {
           {/* Export Modal */}
           <AnimatePresence>
             {isExportModalOpen && (
-              <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+              <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-secondary-900/40 backdrop-blur-sm">
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.95, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                  className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+                  className="bg-surface-card rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
                 >
-                  <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                  <div className="p-6 border-b border-surface-border flex items-center justify-between bg-surface-bg/50">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-brand-100 flex items-center justify-center text-brand-600">
+                      <div className="w-10 h-10 rounded-xl bg-primary-100 flex items-center justify-center text-primary-600">
                         <Download className="w-5 h-5" />
                       </div>
                       <div>
-                        <h3 className="text-base font-bold text-slate-800">导出数据</h3>
-                        <p className="text-xs text-slate-500">设置文件名并导出为 Excel 表格</p>
+                        <h3 className="text-base font-bold text-secondary-800">导出数据</h3>
+                        <p className="text-xs text-surface-muted">设置文件名并导出为 Excel 表格</p>
                       </div>
                     </div>
                     <button 
                       onClick={() => setIsExportModalOpen(false)}
-                      className="p-2 hover:bg-slate-200 rounded-lg transition-colors text-slate-400 hover:text-slate-600"
+                      className="p-2 hover:bg-secondary-200 rounded-lg transition-colors text-surface-muted hover:text-secondary-600"
                     >
                       <X className="w-5 h-5" />
                     </button>
@@ -3227,40 +3169,40 @@ export function CompetitorAnalysis() {
 
                   <div className="p-6 space-y-4">
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-slate-500 ml-1">文件名</label>
+                      <label className="text-xs font-bold text-surface-muted ml-1">文件名</label>
                       <div className="relative">
                         <input 
                           type="text" 
                           value={exportFileName}
                           onChange={(e) => setExportFileName(e.target.value)}
                           placeholder="请输入文件名"
-                          className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all pr-12"
+                          className="w-full px-4 py-3 bg-surface-bg border border-surface-border rounded-xl text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all pr-12"
                         />
-                        <div className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">.xlsx</div>
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-surface-muted">.xlsx</div>
                       </div>
                     </div>
 
-                    <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 flex gap-3">
-                      <div className="text-amber-500 shrink-0 mt-0.5">
+                    <div className="bg-warning-50 border border-warning-100 rounded-xl p-4 flex gap-3">
+                      <div className="text-warning-500 shrink-0 mt-0.5">
                         <Settings className="w-4 h-4" />
                       </div>
-                      <div className="text-xs text-amber-700 leading-relaxed">
+                      <div className="text-xs text-warning-700 leading-relaxed">
                         <span className="font-bold">提示：</span>
                         浏览器将根据您的设置，在下载时弹出位置选择对话框或直接保存到默认下载目录。
                       </div>
                     </div>
                   </div>
 
-                  <div className="p-6 bg-slate-50/50 border-t border-slate-100 flex gap-3">
+                  <div className="p-6 bg-surface-bg/50 border-t border-surface-border flex gap-3">
                     <button 
                       onClick={() => setIsExportModalOpen(false)}
-                      className="flex-1 px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-50 transition-all"
+                      className="flex-1 px-4 py-2.5 bg-surface-card border border-surface-border rounded-xl text-sm font-bold text-secondary-600 hover:bg-secondary-50 transition-all"
                     >
                       取消
                     </button>
                     <button 
                       onClick={confirmExport}
-                      className="flex-1 px-4 py-2.5 bg-brand-600 text-white rounded-xl text-sm font-bold hover:bg-brand-700 transition-all shadow-lg shadow-brand-200"
+                      className="flex-1 px-4 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-bold hover:bg-primary-700 transition-all shadow-lg shadow-primary-200"
                     >
                       确认导出
                     </button>

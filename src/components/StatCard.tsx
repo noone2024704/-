@@ -11,10 +11,10 @@ interface StatCardProps {
 
 export function StatCard({ title, value, icon, trend, color }: StatCardProps) {
   const colorMap: Record<string, { bg: string, text: string, icon: string }> = {
-    brand: { bg: 'bg-brand-50/50', text: 'text-brand-600', icon: 'bg-brand-100/50 text-brand-600 border-brand-200/50' },
-    emerald: { bg: 'bg-emerald-50/50', text: 'text-emerald-600', icon: 'bg-emerald-100/50 text-emerald-600 border-emerald-200/50' },
-    amber: { bg: 'bg-amber-50/50', text: 'text-amber-600', icon: 'bg-amber-100/50 text-amber-600 border-amber-200/50' },
-    rose: { bg: 'bg-rose-50/50', text: 'text-rose-600', icon: 'bg-rose-100/50 text-rose-600 border-rose-200/50' },
+    brand: { bg: 'bg-primary-50/50', text: 'text-primary-600', icon: 'bg-primary-100/50 text-primary-600 border-primary-200/50' },
+    emerald: { bg: 'bg-success-50/50', text: 'text-success-600', icon: 'bg-success-100/50 text-success-600 border-success-200/50' },
+    amber: { bg: 'bg-warning-50/50', text: 'text-warning-600', icon: 'bg-warning-100/50 text-warning-600 border-warning-200/50' },
+    rose: { bg: 'bg-error-50/50', text: 'text-error-600', icon: 'bg-error-100/50 text-error-600 border-error-200/50' },
     blue: { bg: 'bg-blue-50/50', text: 'text-blue-600', icon: 'bg-blue-100/50 text-blue-600 border-blue-200/50' },
     violet: { bg: 'bg-violet-50/50', text: 'text-violet-600', icon: 'bg-violet-100/50 text-violet-600 border-violet-200/50' },
     orange: { bg: 'bg-orange-50/50', text: 'text-orange-600', icon: 'bg-orange-100/50 text-orange-600 border-orange-200/50' },
@@ -36,8 +36,8 @@ export function StatCard({ title, value, icon, trend, color }: StatCardProps) {
           {React.cloneElement(icon as React.ReactElement, { className: 'w-4 h-4' })}
         </div>
         <div className={`flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-bold ${
-          isNeutral ? 'bg-slate-100 text-slate-500' : 
-          isPositive ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'
+          isNeutral ? 'bg-secondary-100 text-secondary-500' : 
+          isPositive ? 'bg-success-50 text-success-600' : 'bg-error-50 text-error-600'
         }`}>
           {trend}
         </div>
@@ -46,11 +46,11 @@ export function StatCard({ title, value, icon, trend, color }: StatCardProps) {
       <div className="mt-4 relative z-10">
         <h4 className="data-label mb-1 opacity-70">{title}</h4>
         <div className="flex items-baseline gap-1">
-          <p className="text-xl font-bold text-slate-900 tracking-tight leading-none">{value}</p>
+          <p className="text-xl font-bold text-secondary-900 tracking-tight leading-none">{value}</p>
         </div>
       </div>
       
-      <div className="absolute bottom-0 left-0 w-full h-1 bg-slate-50 overflow-hidden">
+      <div className="absolute bottom-0 left-0 w-full h-1 bg-secondary-50 overflow-hidden">
         <motion.div 
           initial={{ width: 0 }}
           animate={{ width: '100%' }}

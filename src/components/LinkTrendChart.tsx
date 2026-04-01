@@ -68,23 +68,23 @@ export const LinkTrendChart: React.FC<LinkTrendChartProps> = ({ linkId, data, on
 
   return (
     <div className="w-full premium-card overflow-hidden">
-      <div className="p-6 border-b border-slate-100 bg-slate-50/30 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="p-6 border-b border-surface-border bg-surface-bg/30 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="flex items-center gap-4">
           <button 
             onClick={onBack}
-            className="p-2 bg-white hover:bg-slate-50 rounded-xl transition-all text-slate-500 hover:text-brand-600 border border-slate-200 shadow-sm group"
+            className="p-2 bg-surface-card hover:bg-secondary-50 rounded-xl transition-all text-surface-muted hover:text-primary-600 border border-surface-border shadow-sm group"
             title="返回对比视图"
           >
             <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
           </button>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-lg font-bold text-slate-800 tracking-tight">链接趋势分析</h3>
-              <span className="px-2 py-0.5 bg-brand-50 text-brand-600 text-[10px] font-bold rounded-md border border-brand-100 font-mono">
+              <h3 className="text-lg font-bold text-secondary-800 tracking-tight">链接趋势分析</h3>
+              <span className="px-2 py-0.5 bg-primary-50 text-primary-600 text-[10px] font-bold rounded-md border border-primary-100 font-mono">
                 {linkId}
               </span>
             </div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">点击下方指标切换展示趋势（最多选择4项）</p>
+            <p className="text-[10px] font-bold text-surface-muted uppercase tracking-wider mt-1">点击下方指标切换展示趋势（最多选择4项）</p>
           </div>
         </div>
       </div>
@@ -101,8 +101,8 @@ export const LinkTrendChart: React.FC<LinkTrendChartProps> = ({ linkId, data, on
                 className={`
                   flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-bold transition-all border
                   ${isActive 
-                    ? 'bg-brand-600 text-white border-brand-500 shadow-lg shadow-brand-200' 
-                    : 'bg-white text-slate-500 hover:bg-slate-50 border-slate-200 hover:text-slate-700'}
+                    ? 'bg-primary-600 text-white border-primary-500 shadow-lg shadow-primary-200' 
+                    : 'bg-surface-card text-surface-muted hover:bg-secondary-50 border-surface-border hover:text-secondary-700'}
                 `}
               >
                 <div 
@@ -116,21 +116,21 @@ export const LinkTrendChart: React.FC<LinkTrendChartProps> = ({ linkId, data, on
           })}
         </div>
 
-        <div className="h-[400px] w-full bg-slate-50/30 rounded-2xl border border-slate-100 p-4">
+        <div className="h-[400px] w-full bg-surface-bg/30 rounded-2xl border border-surface-border p-4">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={trendData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="4 4" vertical={false} stroke="rgba(0,0,0,0.03)" />
               <XAxis 
                 dataKey="date" 
                 tickFormatter={(str) => format(parseISO(str), 'MM/dd')}
-                tick={{ fontSize: 10, fill: '#94a3b8', fontWeight: 700 }}
+                tick={{ fontSize: 10, fill: 'var(--color-surface-muted)', fontWeight: 700 }}
                 axisLine={false}
                 tickLine={false}
                 dy={10}
               />
               
               <YAxis 
-                tick={{ fontSize: 10, fill: '#94a3b8', fontWeight: 700 }}
+                tick={{ fontSize: 10, fill: 'var(--color-surface-muted)', fontWeight: 700 }}
                 axisLine={false}
                 tickLine={false}
                 width={40}
@@ -140,8 +140,8 @@ export const LinkTrendChart: React.FC<LinkTrendChartProps> = ({ linkId, data, on
                 content={({ active, payload, label }) => {
                   if (active && payload && payload.length) {
                     return (
-                      <div className="bg-white/90 backdrop-blur-xl p-4 border border-slate-200 shadow-2xl rounded-2xl min-w-[180px]">
-                        <p className="data-label mb-3 border-b border-slate-100 pb-2">
+                      <div className="bg-surface-card/90 backdrop-blur-xl p-4 border border-surface-border shadow-2xl rounded-2xl min-w-[180px]">
+                        <p className="data-label mb-3 border-b border-surface-border pb-2">
                           {format(parseISO(label), 'yyyy / MM / dd')}
                         </p>
                         <div className="space-y-2.5">
@@ -151,9 +151,9 @@ export const LinkTrendChart: React.FC<LinkTrendChartProps> = ({ linkId, data, on
                               <div key={entry.dataKey} className="flex justify-between items-center gap-4">
                                 <div className="flex items-center gap-2">
                                   <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: entry.color }} />
-                                  <span className="text-[11px] font-medium text-slate-600">{entry.name}</span>
+                                  <span className="text-[11px] font-medium text-secondary-600">{entry.name}</span>
                                 </div>
-                                <span className="text-[11px] font-bold text-slate-900 tabular-nums">
+                                <span className="text-[11px] font-bold text-secondary-900 tabular-nums">
                                   {config?.formatter(entry.value)}
                                 </span>
                               </div>
@@ -190,16 +190,16 @@ export const LinkTrendChart: React.FC<LinkTrendChartProps> = ({ linkId, data, on
           {activeConfigs.map(config => {
             const latestValue = trendData.length > 0 ? trendData[trendData.length - 1][config.key as keyof typeof trendData[0]] : 0;
             return (
-              <div key={config.key} className="p-4 bg-white rounded-xl border border-slate-100 shadow-sm">
+              <div key={config.key} className="p-4 bg-surface-card rounded-xl border border-surface-border shadow-sm">
                 <p className="data-label mb-1.5 opacity-60">{config.label}</p>
-                <p className="text-lg font-bold text-slate-900 tabular-nums">
+                <p className="text-lg font-bold text-secondary-900 tabular-nums">
                   {config.formatter(latestValue as number)}
                 </p>
               </div>
             );
           })}
         </div>
-        <p className="mt-6 text-[10px] text-slate-400 text-center font-medium tracking-wide">
+        <p className="mt-6 text-[10px] text-surface-muted text-center font-medium tracking-wide">
           * 数据更新至所选范围的最后一天
         </p>
       </div>

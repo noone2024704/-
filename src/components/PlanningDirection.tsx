@@ -87,11 +87,11 @@ export function PlanningDirection() {
   return (
     <div className="flex flex-col h-full bg-white">
       {/* Top Filter Bar */}
-      <div className="p-4 border-b border-slate-200 space-y-4">
+      <div className="p-4 border-b border-secondary-200 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="flex items-center border border-slate-200 rounded-lg overflow-hidden">
-              <div className="px-3 py-2 bg-slate-50 border-r border-slate-200 text-xs font-bold text-slate-500">平台</div>
+            <div className="flex items-center border border-secondary-200 rounded-lg overflow-hidden">
+              <div className="px-3 py-2 bg-secondary-50 border-r border-secondary-200 text-xs font-bold text-secondary-500">平台</div>
               <select 
                 value={selectedPlatform}
                 onChange={(e) => setSelectedPlatform(e.target.value)}
@@ -103,7 +103,7 @@ export function PlanningDirection() {
               </select>
             </div>
 
-            <div className="flex items-center border border-slate-200 rounded-lg overflow-hidden">
+            <div className="flex items-center border border-secondary-200 rounded-lg overflow-hidden">
               <select 
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
@@ -119,7 +119,7 @@ export function PlanningDirection() {
               <select 
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(e.target.value)}
-                className="border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none bg-white"
+                className="border border-secondary-200 rounded-lg px-3 py-2 text-sm outline-none bg-white"
               >
                 <option>2025年</option>
                 <option>2024年</option>
@@ -127,7 +127,7 @@ export function PlanningDirection() {
               <select 
                 value={selectedMonth}
                 onChange={(e) => setSelectedMonth(e.target.value)}
-                className="border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none bg-white"
+                className="border border-secondary-200 rounded-lg px-3 py-2 text-sm outline-none bg-white"
               >
                 <option>01月</option>
                 <option>02月</option>
@@ -136,29 +136,29 @@ export function PlanningDirection() {
             </div>
 
             <div className="flex items-center gap-2">
-              <button className="p-2 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors">
-                <ChevronLeft className="w-4 h-4 text-slate-400" />
+              <button className="p-2 hover:bg-secondary-100 rounded-lg border border-secondary-200 transition-colors">
+                <ChevronLeft className="w-4 h-4 text-secondary-400" />
               </button>
-              <button className="p-2 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors">
-                <ChevronRight className="w-4 h-4 text-slate-400" />
+              <button className="p-2 hover:bg-secondary-100 rounded-lg border border-secondary-200 transition-colors">
+                <ChevronRight className="w-4 h-4 text-secondary-400" />
               </button>
-              <button className="p-2 bg-brand-50 hover:bg-brand-100 rounded-lg border border-brand-200 transition-colors">
-                <Play className="w-4 h-4 text-brand-600 fill-brand-600" />
+              <button className="p-2 bg-primary-50 hover:bg-primary-100 rounded-lg border border-primary-200 transition-colors">
+                <Play className="w-4 h-4 text-primary-600 fill-primary-600" />
               </button>
             </div>
 
-            <div className="text-xs text-slate-400">
+            <div className="text-xs text-secondary-400">
               ( 统计时间：2025年1月1日-1月31日 )
             </div>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-all">
+          <button className="flex items-center gap-2 px-4 py-2 border border-secondary-200 rounded-lg text-sm font-medium text-secondary-600 hover:bg-secondary-50 transition-all">
             <Download className="w-4 h-4" />
             导出表格
           </button>
         </div>
 
         <div className="flex items-center justify-between">
-          <div className="flex items-center border border-slate-200 rounded-lg overflow-hidden">
+          <div className="flex items-center border border-secondary-200 rounded-lg overflow-hidden">
             <select 
               value={selectedProduct}
               onChange={(e) => setSelectedProduct(e.target.value)}
@@ -170,7 +170,7 @@ export function PlanningDirection() {
               <option>夹网泳池</option>
             </select>
           </div>
-          <button className="flex items-center gap-2 px-6 py-2 bg-brand-600 text-white rounded-lg text-sm font-bold hover:bg-brand-700 transition-all shadow-lg shadow-brand-200">
+          <button className="flex items-center gap-2 px-6 py-2 bg-primary-600 text-white rounded-lg text-sm font-bold hover:bg-primary-700 transition-all shadow-lg shadow-primary-200">
             <Wand2 className="w-4 h-4" />
             开始策划
           </button>
@@ -180,64 +180,64 @@ export function PlanningDirection() {
       {/* Main Table Area */}
       <div className="flex-1 overflow-auto custom-scrollbar">
         <table className="w-full border-collapse text-left table-fixed">
-          <thead className="sticky top-0 bg-slate-50 z-10 border-b border-slate-200">
+          <thead className="sticky top-0 bg-secondary-50 z-10 border-b border-secondary-200">
             <tr>
-              <th className="p-4 w-12 border-r border-slate-200">
-                <input type="checkbox" className="rounded border-slate-300 text-brand-600 focus:ring-brand-500" />
+              <th className="p-4 w-12 border-r border-secondary-200">
+                <input type="checkbox" className="rounded border-secondary-300 text-primary-600 focus:ring-primary-500" />
               </th>
-              <th className="p-4 w-16 border-r border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">编号</th>
-              <th className="p-4 w-48 border-r border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">产品类别</th>
-              <th className="p-4 w-48 border-r border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">上架类目</th>
-              <th className="p-4 w-32 border-r border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">场景</th>
-              <th className="p-4 w-48 border-r border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">人群 (画面主体)</th>
-              <th className="p-4 w-64 border-r border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">功能功效</th>
-              <th className="p-4 w-64 border-r border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">营销卖点</th>
-              <th className="p-4 w-32 text-[11px] font-bold text-slate-500 uppercase tracking-wider">对应尺寸</th>
+              <th className="p-4 w-16 border-r border-secondary-200 text-[11px] font-bold text-secondary-500 uppercase tracking-wider">编号</th>
+              <th className="p-4 w-48 border-r border-secondary-200 text-[11px] font-bold text-secondary-500 uppercase tracking-wider">产品类别</th>
+              <th className="p-4 w-48 border-r border-secondary-200 text-[11px] font-bold text-secondary-500 uppercase tracking-wider">上架类目</th>
+              <th className="p-4 w-32 border-r border-secondary-200 text-[11px] font-bold text-secondary-500 uppercase tracking-wider">场景</th>
+              <th className="p-4 w-48 border-r border-secondary-200 text-[11px] font-bold text-secondary-500 uppercase tracking-wider">人群 (画面主体)</th>
+              <th className="p-4 w-64 border-r border-secondary-200 text-[11px] font-bold text-secondary-500 uppercase tracking-wider">功能功效</th>
+              <th className="p-4 w-64 border-r border-secondary-200 text-[11px] font-bold text-secondary-500 uppercase tracking-wider">营销卖点</th>
+              <th className="p-4 w-32 text-[11px] font-bold text-secondary-500 uppercase tracking-wider">对应尺寸</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-secondary-100">
             {MOCK_PLANNING_DATA.map((item) => (
-              <tr key={item.id} className="hover:bg-slate-50/50 transition-colors group align-top">
-                <td className="p-4 border-r border-slate-100">
-                  <input type="checkbox" className="rounded border-slate-300 text-brand-600 focus:ring-brand-500" />
+              <tr key={item.id} className="hover:bg-secondary-50/50 transition-colors group align-top">
+                <td className="p-4 border-r border-secondary-100">
+                  <input type="checkbox" className="rounded border-secondary-300 text-primary-600 focus:ring-primary-500" />
                 </td>
-                <td className="p-4 border-r border-slate-100 text-xs text-slate-500">{item.id}</td>
-                <td className="p-4 border-r border-slate-100">
+                <td className="p-4 border-r border-secondary-100 text-xs text-secondary-500">{item.id}</td>
+                <td className="p-4 border-r border-secondary-100">
                   <div className="flex flex-wrap gap-1">
                     {item.category.map((cat, idx) => (
-                      <span key={idx} className={`px-2 py-0.5 rounded text-[10px] font-bold ${idx === 0 ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'}`}>
+                      <span key={idx} className={`px-2 py-0.5 rounded text-[10px] font-bold ${idx === 0 ? 'bg-warning-100 text-warning-700' : 'bg-success-100 text-success-700'}`}>
                         {cat}
                       </span>
                     ))}
                   </div>
                 </td>
-                <td className="p-4 border-r border-slate-100">
+                <td className="p-4 border-r border-secondary-100">
                   <div className="space-y-1">
                     {item.subCategory.map((sub, idx) => (
-                      <p key={idx} className="text-[10px] text-slate-600">{sub}</p>
+                      <p key={idx} className="text-[10px] text-secondary-600">{sub}</p>
                     ))}
                   </div>
                 </td>
-                <td className="p-4 border-r border-slate-100 text-xs font-medium text-slate-700">{item.scene}</td>
-                <td className="p-4 border-r border-slate-100 text-xs text-slate-600 leading-relaxed">{item.audience}</td>
-                <td className="p-4 border-r border-slate-100">
+                <td className="p-4 border-r border-secondary-100 text-xs font-medium text-secondary-700">{item.scene}</td>
+                <td className="p-4 border-r border-secondary-100 text-xs text-secondary-600 leading-relaxed">{item.audience}</td>
+                <td className="p-4 border-r border-secondary-100">
                   <div className="space-y-1">
                     {item.functions.map((fn, idx) => (
-                      <p key={idx} className="text-[10px] text-slate-600">{fn}</p>
+                      <p key={idx} className="text-[10px] text-secondary-600">{fn}</p>
                     ))}
                   </div>
                 </td>
-                <td className="p-4 border-r border-slate-100">
+                <td className="p-4 border-r border-secondary-100">
                   <div className="space-y-1">
                     {item.sellingPoints.map((point, idx) => (
-                      <p key={idx} className="text-[10px] text-slate-600">{point}</p>
+                      <p key={idx} className="text-[10px] text-secondary-600">{point}</p>
                     ))}
                   </div>
                 </td>
                 <td className="p-4">
                   <div className="space-y-1">
                     {item.sizes.map((size, idx) => (
-                      <p key={idx} className="text-[10px] text-slate-600">{size}</p>
+                      <p key={idx} className="text-[10px] text-secondary-600">{size}</p>
                     ))}
                   </div>
                 </td>
