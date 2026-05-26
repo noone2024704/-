@@ -13,6 +13,7 @@ import { ArrowLeft, Check } from 'lucide-react';
 import { DataPoint } from '../types';
 import { format, parseISO } from 'date-fns';
 import { motion, AnimatePresence } from 'motion/react';
+import { getLinkProductName } from '../mockData';
 
 interface LinkTrendChartProps {
   linkId: string;
@@ -84,7 +85,11 @@ export const LinkTrendChart: React.FC<LinkTrendChartProps> = ({ linkId, data, on
                 {linkId}
               </span>
             </div>
-            <p className="text-[10px] font-bold text-surface-muted uppercase tracking-wider mt-1">点击下方指标切换展示趋势（最多选择4项）</p>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-[10px] font-bold text-surface-muted uppercase tracking-wider">
+              <span>主产品：<span className="text-secondary-800 font-extrabold">{getLinkProductName(linkId)}</span></span>
+              <span className="text-secondary-300">•</span>
+              <span>点击下方指标切换展示趋势（最多选择4项）</span>
+            </div>
           </div>
         </div>
       </div>

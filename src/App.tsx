@@ -410,7 +410,10 @@ export default function App() {
               </div>
             </header>
             <main className="flex-1 overflow-hidden">
-              <CompetitorAnalysis />
+              <CompetitorAnalysis onSendToImageSpace={(imageUrl) => {
+                setProductReferenceImage(imageUrl);
+                setActivePage('image_space');
+              }} />
             </main>
           </>
         ) : activePage === 'planning' ? (

@@ -85,3 +85,17 @@ export const PRODUCT_LIBRARY = [
     ]
   },
 ];
+
+export const getLinkProductName = (linkId: string): string => {
+  const mapping: Record<string, string> = {
+    'L001': '全自动加厚充气家庭大泳池',
+    'L002': '全自动按摩恒温足浴桶',
+    'L003': '独角兽水上坐骑儿童泳圈',
+    'L004': '加厚折叠成人双人泡澡桶',
+    'L005': '专业竞技加厚充气皮划艇',
+    'L101': '车载抗压充气旅行睡眠床垫',
+    'L102': '火烈鸟水上充气浮排坐骑',
+    'L103': '多功能健身拉力绳套装',
+  };
+  return mapping[linkId] || `优质热销商品 ${linkId}`;
+};

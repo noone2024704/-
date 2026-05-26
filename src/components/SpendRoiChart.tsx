@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { motion } from 'motion/react';
 import { DataPoint } from '../types';
 import { AlertTriangle } from 'lucide-react';
+import { getLinkProductName } from '../mockData';
 
 interface SpendRoiChartProps {
   data: DataPoint[];
@@ -45,6 +46,7 @@ export const SpendRoiChart: React.FC<SpendRoiChartProps> = ({ data, onSelectLink
           <thead>
             <tr className="border-b border-surface-border">
               <th className="px-6 py-4 text-left data-label w-[140px]">链接 ID</th>
+              <th className="px-6 py-4 text-left data-label w-[220px]">主产品名称</th>
               <th className="px-6 py-4 text-right data-label w-[120px]">花费金额</th>
               <th className="px-6 py-4 text-center data-label">对比分析 (Spend vs ROI)</th>
               <th className="px-6 py-4 text-left data-label w-[140px]">ROI 表现</th>
@@ -71,6 +73,11 @@ export const SpendRoiChart: React.FC<SpendRoiChartProps> = ({ data, onSelectLink
                       {item.linkId}
                     </span>
                   </td>
+                  <td className="px-6 py-4 text-left">
+                    <span className="text-xs font-bold text-secondary-700 block truncate max-w-[200px]" title={getLinkProductName(item.linkId)}>
+                      {getLinkProductName(item.linkId)}
+                    </span>
+                  </td>
                   <td className="px-6 py-4 text-right">
                     <span className="text-xs font-bold text-primary-600 tabular-nums">
                       ¥{item.spend.toLocaleString()}
@@ -87,15 +94,20 @@ export const SpendRoiChart: React.FC<SpendRoiChartProps> = ({ data, onSelectLink
                         />
                       </div>
                       <div className="w-[2px] h-full bg-surface-card z-10" />
-                      <div className="flex-1 h-full bg-secondary-100/50 rounded-r-sm overflow-hidden">
+                      <div className="flex-1 h-full bg-secondary-100/50 rounded-r-sm overflow-hidden relative">
                         <motion.div 
                           initial={{ width: 0 }}
                           animate={{ width: `${(item.roi / maxRoi) * 100}%` }}
                           transition={{ duration: 1, ease: "easeOut" }}
-                          className={`h-full transition-colors ${
-                            isLowRoi ? 'bg-error-400 group-hover:bg-error-500' : 'bg-success-400 group-hover:bg-success-500'
+                          className={`h-full transition-all duration-300 relative ${
+                            isLowRoi 
+                              ? 'bg-error-500 shadow-[0_0_12px_rgba(239,68,68,0.4)]' 
+                              : 'bg-success-500 shadow-[0_0_12px_rgba(34,197,94,0.4)]'
                           }`}
-                        />
+                        >
+                          {/* Glossy overlay for "lit up" effect */}
+                          <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent pointer-events-none" />
+                        </motion.div>
                       </div>
                     </div>
                   </td>

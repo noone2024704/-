@@ -35,6 +35,7 @@ import {
   LineChart,
   Copy,
   CheckSquare,
+  Sparkles,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { PddCategoryFilter } from './PddCategoryFilter';
@@ -1081,7 +1082,7 @@ function CustomDatePicker({
   );
 }
 
-export function CompetitorAnalysis() {
+export function CompetitorAnalysis({ onSendToImageSpace }: { onSendToImageSpace?: (imageUrl: string) => void }) {
   const [selectedYear, setSelectedYear] = useState('2026年');
   const [selectedMonth, setSelectedMonth] = useState('03月');
   const [selectedCategory, setSelectedCategory] = useState<string>('全部');
@@ -1109,6 +1110,7 @@ export function CompetitorAnalysis() {
   const [isMaterialFilterOpen, setIsMaterialFilterOpen] = useState(false);
   const [selectedMaterialFilter, setSelectedMaterialFilter] = useState<string[]>(['全部']);
   const [materialSearchQuery, setMaterialSearchQuery] = useState('');
+  const [zoomedImage, setZoomedImage] = useState<string | null>(null);
   const [isPriceFilterOpen, setIsPriceFilterOpen] = useState(false);
   const [minPriceFilter, setMinPriceFilter] = useState('');
   const [maxPriceFilter, setMaxPriceFilter] = useState('');
@@ -2953,7 +2955,13 @@ export function CompetitorAnalysis() {
                           </div>
                         </td>
                         <td className="p-4">
-                          <img src={item.productImage} alt="" className="w-10 h-10 rounded-lg object-cover border border-surface-border" referrerPolicy="no-referrer" />
+                          <img 
+                            src={item.productImage} 
+                            alt="" 
+                            className="w-10 h-10 rounded-lg object-cover border border-surface-border cursor-zoom-in hover:scale-105 transition-transform" 
+                            referrerPolicy="no-referrer" 
+                            onClick={() => setZoomedImage(item.productImage)}
+                          />
                         </td>
                         <td className="p-4 text-xs text-secondary-600">{item.material}</td>
                         <td className="p-4 text-xs font-bold text-secondary-800">¥{item.usagePrice?.toFixed(2)}</td>
@@ -3056,6 +3064,59 @@ export function CompetitorAnalysis() {
             </table>
           </div>
           )}
+
+          {/* Image Zoom Modal */}
+          <AnimatePresence>
+            {zoomedImage && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-[200] flex items-center justify-center bg-secondary-900/90 backdrop-blur-md p-4"
+                onClick={() => setZoomedImage(null)}
+              >
+                <motion.div
+                  initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                  animate={{ scale: 1, opacity: 1, y: 0 }}
+                  exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                  className="relative flex flex-col items-center gap-8"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {/* Image Container - Fixed 800x800 with responsive fallback */}
+                  <div className="relative w-[800px] h-[800px] max-w-[90vw] max-h-[75vh] bg-white rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10 group">
+                    <img
+                      src={zoomedImage}
+                      alt="Zoomed"
+                      className="w-full h-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                    
+                    {/* Close Button Overlay */}
+                    <button
+                      onClick={() => setZoomedImage(null)}
+                      className="absolute top-6 right-6 p-2.5 bg-black/40 hover:bg-black/60 text-white rounded-full transition-all backdrop-blur-xl border border-white/20 opacity-0 group-hover:opacity-100"
+                    >
+                      <X className="w-6 h-6" />
+                    </button>
+                  </div>
+
+                  {/* Action Button */}
+                  <button
+                    onClick={() => {
+                      if (onSendToImageSpace && zoomedImage) {
+                        onSendToImageSpace(zoomedImage);
+                        setZoomedImage(null);
+                      }
+                    }}
+                    className="flex items-center gap-3 px-10 py-5 bg-primary-600 text-white rounded-2xl text-lg font-bold shadow-[0_20px_40px_rgba(37,99,235,0.4)] hover:bg-primary-700 transition-all transform hover:scale-105 active:scale-95 group"
+                  >
+                    <Sparkles className="w-6 h-6 group-hover:rotate-12 transition-transform" />
+                    <span>发送到生图空间</span>
+                  </button>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Pagination */}
           {filteredCompetitors.length > 0 && (
